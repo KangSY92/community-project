@@ -20,29 +20,29 @@
           <form id="registerForm" class="register-form">
             <div class="form-group">
               <label for="registerUsername">아이디 <span class="required">*</span></label>
-              <input type="text" id="registerUsername" name="username" required>
+              <input type="text" id="registerUsername" name="username" onkeyup="idCheck()" required>
               <small class="form-hint">영문, 숫자 조합 5~20자</small>
             </div>
             
             <div class="form-group">
               <label for="registerPassword">비밀번호 <span class="required">*</span></label>
-              <input type="password" id="registerPassword" name="password" required>
+              <input type="password" id="registerPassword" name="password" onkeyup="passCheck()" required>
               <small class="form-hint">영문, 숫자, 특수문자 조합 8자 이상</small>
             </div>
             
             <div class="form-group">
               <label for="confirmPassword">비밀번호 확인 <span class="required">*</span></label>
-              <input type="password" id="confirmPassword" name="confirmPassword" required>
+              <input type="password" id="confirmPassword" name="confirmPassword" onkeyup="confassCheck()" required>
             </div>
             
             <div class="form-group">
               <label for="registerEmail">이메일 <span class="required">*</span></label>
-              <input type="email" id="registerEmail" name="email" required>
+              <input type="email" id="registerEmail" name="email" onkeyup="emailCheck()" required>
             </div>
             
             <div class="form-group">
               <label for="registerNickname">닉네임 <span class="required">*</span></label>
-              <input type="text" id="registerNickname" name="nickname" required>
+              <input type="text" id="registerNickname" name="nickname" onkeyup="nicknameChock()" required>
               <small class="form-hint">2~10자 이내로 입력해주세요</small>
             </div>
             
@@ -77,7 +77,7 @@
             </div>
             
             <div class="form-actions">
-              <button type="submit" class="btn btn-primary btn-block">가입하기</button>
+              <button type="submit" class="btn btn-primary btn-block" onclick="allCheck()">가입하기</button>
             </div>
             
             <div class="login-link">
@@ -89,16 +89,7 @@
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 커뮤니티 홈페이지. All rights reserved.</p>
-      <div class="footer-links">
-        <a href="#">이용약관</a>
-        <a href="#">개인정보처리방침</a>
-        <a href="#">고객센터</a>
-      </div>
-    </div>
-  </footer>
+  <footer th:insert="~{fragments/common/footer :: footer}"></footer>
 
   <!-- 로그인 모달 -->
   <div id="loginModal" class="modal">

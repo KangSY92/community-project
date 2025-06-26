@@ -74,14 +74,14 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // 비밀번호 확인
       if (password !== confirmPassword) {
-        alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+        //alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
         return;
       }
       
       // 여기에 실제 회원가입 처리 코드 추가
       // 샘플 회원가입 처리 (실제 구현에서는 서버와 통신)
-      alert('회원가입이 완료되었습니다! 로그인해주세요.');
-      window.location.href = 'index.html';
+      //alert('회원가입이 완료되었습니다! 로그인해주세요.');
+      //window.location.href = 'index.html';
     });
   }
   
