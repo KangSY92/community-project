@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head th:insert="~{fragments/common/head :: head}">
+
+<body>
+
+	<header th:insert="~{fragments/common/header :: header}"></header>
+
+	
+  <main>
+    <section class="register">
+      <div class="container">
+        <div class="register-container">
+          <div class="register-header">
+            <h2>회원가입</h2>
+            <p>커뮤니티의 일원이 되어 다양한 활동에 참여하세요!</p>
+          </div>
+          
+          <form id="registerForm" class="register-form">
+            <div class="form-group">
+              <label for="registerUsername">아이디 <span class="required">*</span></label>
+              <input type="text" id="registerUsername" name="username" onkeyup="idCheck()" required>
+              <small class="form-hint">영문, 숫자 조합 5~20자</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="registerPassword">비밀번호 <span class="required">*</span></label>
+              <input type="password" id="registerPassword" name="password" onkeyup="passCheck()" required>
+              <small class="form-hint">영문, 숫자, 특수문자 조합 8자 이상</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="confirmPassword">비밀번호 확인 <span class="required">*</span></label>
+              <input type="password" id="confirmPassword" name="confirmPassword" onkeyup="confassCheck()" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="registerEmail">이메일 <span class="required">*</span></label>
+              <input type="email" id="registerEmail" name="email" onkeyup="emailCheck()" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="registerNickname">닉네임 <span class="required">*</span></label>
+              <input type="text" id="registerNickname" name="nickname" onkeyup="nicknameCheck()" required>
+              <small class="form-hint">2~10자 이내로 입력해주세요</small>
+            </div>
+            
+            <div class="form-group">
+              <label>프로필 이미지</label>
+              <div class="profile-upload">
+                <div class="profile-preview" id="profilePreview">
+                  <img src="https://api.a0.dev/assets/image?text=기본%20프로필&aspect=1:1" alt="기본 프로필">
+                </div>
+                <div class="profile-input">
+                  <input type="file" id="profileImage" name="profileImage" accept="image/*">
+                  <button type="button" class="btn btn-sm" id="uploadProfileBtn">이미지 선택</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group checkbox-group">
+              <div class="checkbox-item">
+                <input type="checkbox" id="termsAgree" name="termsAgree" required>
+                <label for="termsAgree">이용약관 동의 <span class="required">*</span></label>
+                <a href="#" class="terms-link">[보기]</a>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" id="privacyAgree" name="privacyAgree" required>
+                <label for="privacyAgree">개인정보 수집 및 이용 동의 <span class="required">*</span></label>
+                <a href="#" class="terms-link">[보기]</a>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" id="marketingAgree" name="marketingAgree">
+                <label for="marketingAgree">마케팅 정보 수신 동의 (선택)</label>
+              </div>
+            </div>
+            
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-block" onclick="return allCheck()">가입하기</button>
+            </div>
+            
+            <div class="login-link">
+              <p>이미 계정이 있으신가요? <a href="#" id="showLoginBtn">로그인</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer th:insert="~{fragments/common/footer :: footer}"></footer>
+
+  <!-- 로그인 모달 -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>로그인</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">아이디</label>
+          <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">로그인</button>
+      </form>
+      <p class="text-center">계정이 없으신가요? <a href="register.html">회원가입</a></p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시판 - 커뮤니티 홈페이지</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1 class="logo">
+        <a href="index.html">커뮤니티</a>
+      </h1>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">홈</a></li>
+          <li><a href="board.html" class="active">게시판</a></li>
+          <li><a href="upload.html">업로드</a></li>
+          <li><a href="#" id="loginBtn">로그인</a></li>
+          <li><a href="register.html">회원가입</a></li>
+          <li>
+            <div class="profile-upload">
+              <div class="profile-preview header-profile" id="profilePreview">
+                <img src="https://api.a0.dev/assets/image?text=기본%20프로필&amp;aspect=1:1" alt="기본 프로필">
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="board">
+      <div class="container">
+        <div class="board-header">
+          <h2>게시판</h2>
+          <div class="board-actions">
+            <div class="search-box">
+              <input type="text" placeholder="검색어를 입력하세요">
+              <button type="button" class="btn">검색</button>
+            </div>
+            <a href="write-post.html" class="btn btn-primary">글쓰기</a>
+          </div>
+        </div>
+
+        <div class="board-list">
+          <table>
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>조회수</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>5</td>
+                <td class="title"><a href="view-post.html?id=5">사진 첨부 테스트입니다</a> <span class="attachment-icon">📁</span></td>
+                <td>user123</td>
+                <td>2025-06-08</td>
+                <td>42</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td class="title"><a href="view-post.html?id=4">오늘 점심 메뉴 추천해주세요!</a> <span class="comment-count">[3]</span></td>
+                <td>foodie</td>
+                <td>2025-06-07</td>
+                <td>128</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td class="title"><a href="view-post.html?id=3">주말에 가볼만한 곳 추천</a> <span class="attachment-icon">📁</span> <span class="comment-count">[5]</span></td>
+                <td>traveler</td>
+                <td>2025-06-06</td>
+                <td>156</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td class="title"><a href="view-post.html?id=2">커뮤니티 사이트 오픈 축하합니다!</a></td>
+                <td>admin</td>
+                <td>2025-06-05</td>
+                <td>210</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td class="title"><a href="view-post.html?id=1">커뮤니티 이용 안내</a></td>
+                <td>admin</td>
+                <td>2025-06-05</td>
+                <td>315</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <a href="#" class="page-link">&laquo;</a>
+          <a href="#" class="page-link active">1</a>
+          <a href="#" class="page-link">2</a>
+          <a href="#" class="page-link">3</a>
+          <a href="#" class="page-link">4</a>
+          <a href="#" class="page-link">5</a>
+          <a href="#" class="page-link">&raquo;</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 커뮤니티 홈페이지. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+        <a href="#">고객센터</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 로그인 모달 -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>로그인</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">아이디</label>
+          <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">로그인</button>
+      </form>
+      <p class="text-center">계정이 없으신가요? <a href="register.html">회원가입</a></p>
+    </div>
+  </div>
+</body>
+</html>
