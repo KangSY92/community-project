@@ -69,7 +69,6 @@ function AgreeCheckbox() {
          const box1 = document.getElementById('termsAgree');
          const box2 = document.getElementById('privacyAgree');
          if(box1.checked && box2.checked) {
-             console.log("체크박스 동의");
              return true
          } else {
              console.log("체크박스 비동의");
