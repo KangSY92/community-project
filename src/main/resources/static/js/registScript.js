@@ -1,94 +1,124 @@
+let idFlag = false;
+let passFlag = false;
+let emailFlag = false;
+let nicknameFlag = false;
+let confirmFlag = false;
+let checkboxFlag = false;
+
+
 function idCheck() {
     const idchk = document.getElementById('idChecked');
     let ichk = /(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{5,20}/;
     const registerUsername = document.getElementById('registerUsername').value;
+    const idHint = document.getElementById('id-hint')
 
-    if (ichk.test(registerUsername)) {
-        console.log("아이디 참")
-        return true
-    } else {
+    if (ichk.test(registerUsername) === false) {
+
         console.log("아이디 거짓")
-        return false
+        idHint.style.color = "red"
+        idFlag = false;
+    } else {
+        console.log("아이디 참")
+        idHint.style.color = "#6c757d"
+        idFlag = true;
     }
 }
 
 function passCheck() {
     let pchk = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
     const registerPassword = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const passHint = document.getElementById('pass-hint');
 
     if (pchk.test(registerPassword)) {
-        console.log("패스워드 참");
-        return true
+        passHint.style.color = "#6c757d";
+        passwordCheck();
+        passFlag = true;
     } else {
-        console.log("패스워드 거짓");
-        return false
+        passHint.style.color = "red";
+        passFlag = false;
+    }
+
+}
+
+function passwordCheck() {
+    const registerPassword = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword');
+    const confirmHint = document.getElementById('confirm-hint');
+    if(confirmPassword.value === ''){
+        confirmHint.style.display = 'none'
+        confirmFlag = false;
+    }else if (registerPassword === confirmPassword.value) {
+        confirmHint.style.display = 'none'
+        console.log("패스워드 확인 참");
+        confirmFlag = true;
+
+    } else {
+        confirmHint.style.display = 'block'
+        confirmHint.style.color = 'red'
+        confirmHint.textContent = "패스워드가 일치하지 않습니다."
+        console.log("패스와드 확인 거짓");
+        confirmFlag = false;
     }
 }
 
-function emailCheck() {
+confirmPassword.addEventListener('focusout', passwordCheck)
+
+registerEmail.addEventListener('focusout', function () {
+    const registerEmail = document.getElementById('registerEmail');
+    const emailHint = document.getElementById('email-hint');
     let echk = /^[A-Za-z0-9]+@[^\s@]+\.[^\s@]{2,}/;
-    const registerEmail = document.getElementById('registerEmail').value;
+    if (echk.test(registerEmail.value)) {
+        emailHint.style.display = 'none';
+        emailFlag = true;
 
-    if (echk.test(registerEmail)) {
-        console.log("이메일 참")
-        return true
     } else {
-        console.log("이메일 거짓")
-        return false
+        emailHint.style.display = 'block';
+        emailHint.textContent = "이메일 형식이 올바르지 않습니다.";
+        emailFlag = false;
     }
-
-}
+})
 
 function nicknameCheck() {
     let nchk = /^[A-Za-z0-9가-힣]{2,10}$/;
     const registerNickname = document.getElementById('registerNickname').value
-
+    const nicknameHint = document.getElementById('nickname-hint');
     if (nchk.test(registerNickname)) {
-        console.log("닉네임 참");
-        return true
+        nicknameHint.style.color = "#6c757d";
+        nicknameFlag = true;
     } else {
-        console.log("닉네임 거짓");
-        return false
+        nicknameHint.style.color = "red";
+        nicknameFlag = false;
     }
 }
 
-function confassCheck() {
-    const registerPassword = document.getElementById('registerPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
 
-    if(registerPassword === confirmPassword) {
-        console.log("패스워드 확인 참");
-        return true
-    } else {
-        console.log("패스와드 확인 거짓");
-        return false
-    }
-}
 
 function AgreeCheckbox() {
-         const box1 = document.getElementById('termsAgree');
-         const box2 = document.getElementById('privacyAgree');
-         if(box1.checked && box2.checked) {
-             return true
-         } else {
-             console.log("체크박스 비동의");
-             return false
-         }
+    const box1 = document.getElementById('termsAgree');
+    const box2 = document.getElementById('privacyAgree');
+    if (box1.checked && box2.checked) {
+        console.log("체크박스 동의")
+        return true;
+    } else {
+        console.log("체크박스 비동의");
+        return false;
+    }
 
-     }
+}
 
 
 function allCheck() {
-    if (idCheck()&&passCheck()&&emailCheck()&&nicknameCheck()&&confassCheck()&&AgreeCheckbox()) {
+    if (idFlag && passFlag && emailFlag && nicknameFlag && confirmFlag && AgreeCheckbox()) {
         console.log("다 참")
-		alert('회원가입이 완료되었습니다! 로그인해주세요.');
-		return true
-    } else if(idCheck()&&passCheck()&&emailCheck()&&nicknameCheck()&&confassCheck()) {
+        alert('회원가입이 완료되었습니다! 로그인해주세요.');
+        return true
+    } else if (idFlag && passFlag && emailFlag && nicknameFlag && confirmFlag) {
         console.log("체크박스 거짓")
-		alert('약관에 동의해주세요.');
-		return false
-		
+        alert('이용약관 동의는 필수입니다.');
+        return false
     } else {
-		alert('형식이 일치하지 않습니다.');
-	}
+        console.log(!idFlag);
+        alert('형식이 일치하지 않습니다.');
+    }
 }
