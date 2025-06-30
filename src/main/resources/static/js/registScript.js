@@ -39,7 +39,7 @@ function emailCheck() {
 
 }
 
-function nicknameChock() {
+function nicknameCheck() {
     let nchk = /^[A-Za-z0-9가-힣]{2,10}$/;
     const registerNickname = document.getElementById('registerNickname').value
 
@@ -65,14 +65,31 @@ function confassCheck() {
     }
 }
 
+function AgreeCheckbox() {
+         const box1 = document.getElementById('termsAgree');
+         const box2 = document.getElementById('privacyAgree');
+         if(box1.checked && box2.checked) {
+             console.log("체크박스 동의");
+             return true
+         } else {
+             console.log("체크박스 비동의");
+             return false
+         }
+
+     }
+
 
 function allCheck() {
-    if (idCheck()&&passCheck()&&emailCheck()&&nicknameChock()&&confassCheck()) {
+    if (idCheck()&&passCheck()&&emailCheck()&&nicknameCheck()&&confassCheck()&&AgreeCheckbox()) {
         console.log("다 참")
 		alert('회원가입이 완료되었습니다! 로그인해주세요.');
-    } else {
-        console.log("다 거짓")
-		alert('형식이 일치하지 않습니다.');
+		return true
+    } else if(idCheck()&&passCheck()&&emailCheck()&&nicknameCheck()&&confassCheck()) {
+        console.log("체크박스 거짓")
+		alert('약관에 동의해주세요.');
+		return false
 		
-    }
+    } else {
+		alert('형식이 일치하지 않습니다.');
+	}
 }
