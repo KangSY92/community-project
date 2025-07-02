@@ -18,13 +18,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int register(RegisterDTO registerDTO) {
 		 String rawPassword = registerDTO.getPassword();
-		    System.out.println("원본 비밀번호 : " + rawPassword);
 		    
 		    String passEncode = passwordEncoder.encode(rawPassword);
-		    System.out.println("암호화된 비밀번호 : " + passEncode);
 		    
 		    registerDTO.setPassword(passEncode);
-		    System.out.println("DTO에 설정된 비밀번호 : " + registerDTO.getPassword());
 		return memberMapper.register(registerDTO);
 	}
 	

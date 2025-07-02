@@ -13,7 +13,7 @@
 							null,
 							null,
 							DEFAULT,
-							'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSoPUWDZ44uXiwqS_ZXtyreQqPbTStyav_vX-gxuvzZlt9nXcBU5nnx_4wZ3lz1hsos1To-G2IgVWk3HFVTn16tXgmoom4Bvxslt4PUE6yd',
+							'/img/profil-img.png',
 							#{email}) 
 	</insert>
 

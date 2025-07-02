@@ -32,7 +32,6 @@ public class MemberController {
 		}
 		
 		int resert = memberService.register(registerDTO);
-		System.out.println("반환 : " + resert);
 		
 		return "index";
 	}
