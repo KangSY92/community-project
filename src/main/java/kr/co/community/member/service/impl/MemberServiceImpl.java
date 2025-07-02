@@ -3,6 +3,7 @@ package kr.co.community.member.service.impl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
 import kr.co.community.member.mapper.MemberMapper;
 import kr.co.community.member.service.MemberService;
@@ -16,13 +17,14 @@ public class MemberServiceImpl implements MemberService {
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
-	public int register(RegisterDTO registerDTO) {
+	public int register(RegisterDTO registerDTO, AgreeDTO agreeDTO) {
 		 String rawPassword = registerDTO.getPassword();
 		    
 		    String passEncode = passwordEncoder.encode(rawPassword);
 		    
 		    registerDTO.setPassword(passEncode);
-		return memberMapper.register(registerDTO);
+		    
+		return memberMapper.register(registerDTO, agreeDTO);
 	}
 	
 	

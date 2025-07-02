@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
 import kr.co.community.member.service.impl.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +28,19 @@ public class MemberController {
 	}
 	
 	@PostMapping("/register")
-	public String register(@Valid RegisterDTO registerDTO, BindingResult bindingResult, Model model) {
+	public String register(@Valid RegisterDTO registerDTO, AgreeDTO agreeDTO, BindingResult bindingResult,HttpServletRequest request, Model model) {
 		if(bindingResult.hasErrors()) {
 			return "member/register";
 		}
+		String boxStatus = request.getParameter("marketingAgree");
 		
-		int resert = memberService.register(registerDTO);
+		if(boxStatus == null) {
+			boxStatus = "N";
+		}
+		agreeDTO.setAgreement(boxStatus);
+		System.out.println("겟"+agreeDTO.getAgreement());
+		
+		int resert = memberService.register(registerDTO, agreeDTO);
 		
 		return "index";
 	}
