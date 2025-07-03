@@ -32,6 +32,7 @@ public class MemberController {
 		if(bindingResult.hasErrors()) {
 			return "member/register";
 		}
+		System.out.println("프로필 이미지 : " + request.getParameter("profileImage"));
 		String boxStatus = request.getParameter("marketingAgree");
 		
 		if(boxStatus == null) {
