@@ -10,6 +10,7 @@ import kr.co.community.member.dto.RegisterDTO;
 public interface MemberMapper {
 	
 	int register(@Param("registerDTO")RegisterDTO registerDTO, @Param("agreeDTO")AgreeDTO agreeDTO);
-	
-
+	void register1(AgreeDTO agreeDTO);
+	void register2(AgreeDTO agreeDTO);
+	void register3(AgreeDTO agreeDTO);
 }

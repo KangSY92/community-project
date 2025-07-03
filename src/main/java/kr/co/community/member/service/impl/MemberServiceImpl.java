@@ -23,10 +23,14 @@ public class MemberServiceImpl implements MemberService {
 		    String passEncode = passwordEncoder.encode(rawPassword);
 		    
 		    registerDTO.setPassword(passEncode);
+		    int regist = memberMapper.register(registerDTO, agreeDTO);
+		    memberMapper.register1(agreeDTO);
+		    memberMapper.register2(agreeDTO);
+		    memberMapper.register3(agreeDTO);
 		    
-		return memberMapper.register(registerDTO, agreeDTO);
-	}
+		return regist;
+	} 
 	
-	
-
 }
+
+	

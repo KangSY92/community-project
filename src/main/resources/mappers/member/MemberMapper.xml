@@ -1,38 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.community.member.mapper.MemberMapper">
-<!--
+
 	<insert id="register">
 		INSERT INTO MEMBER VALUES(member_seq.nextval,
-							#{id},
-							#{name},
-							#{password},
-							DEFAULT,
-							DEFAULT,
-							null,
-							null,
-							DEFAULT,
-							'/img/profil-img.png',
-							#{email}) 
-	</insert>	
--->
-	<insert id="register">
-	INSERT ALL
-	INTO MEMBER VALUES(member_seq.nextval,
-						#{id},
-							#{name},
-							#{password},
-							DEFAULT,
-							DEFAULT,
-							NULL,
-							NULL,
-							DEFAULT,
-							'/img/profil-img.png',
-							#{email})
-	INTO AGREE_TEST VALUES(agree_seq.nextval, member_seq.CURRVAL, 'Y')
-	SELECT * FROM DUAL
+		#{registerDTO.id},
+		#{registerDTO.name},
+		#{registerDTO.password},
+		DEFAULT,
+		DEFAULT,
+		null,
+		null,
+		DEFAULT,
+		'/img/profil-img.png',
+		#{registerDTO.email})
 	</insert>
+		<insert id="register1">
+		INSERT INTO AGREE VALUES(agree_seq.nextval,
+		(SELECT member_id FROM (
+            SELECT member_id FROM MEMBER ORDER BY MEMBER_ID DESC
+        ) WHERE ROWNUM = 1),
+		(SELECT TERMS_ID FROM
+		(SELECT * FROM TERMS
+		WHERE TITLE = '이용약관 동의'
+		ORDER BY CREATE_DATE DESC)
+		WHERE ROWNUM = 1),
+		'Y')
+	</insert>
+
+		<insert id="register2">
+		INSERT INTO AGREE VALUES(agree_seq.nextval,
+		(SELECT member_id FROM (
+            SELECT member_id FROM MEMBER ORDER BY MEMBER_ID DESC
+        ) WHERE ROWNUM = 1),
+		(SELECT TERMS_ID FROM
+		(SELECT * FROM TERMS
+		WHERE TITLE = '개인정보 수집 및 이용 동의'
+		ORDER BY CREATE_DATE DESC)
+		WHERE ROWNUM = 1),
+		'Y')
+	</insert>
+
+	<insert id="register3">
+		INSERT INTO AGREE VALUES(agree_seq.nextval,
+		(SELECT member_id FROM (
+            SELECT member_id FROM MEMBER ORDER BY MEMBER_ID DESC
+        ) WHERE ROWNUM = 1),
+		(SELECT TERMS_ID FROM
+		(SELECT * FROM TERMS
+		WHERE TITLE = '마케팅 정보 수신 동의(선택)'
+		ORDER BY CREATE_DATE DESC)
+		WHERE ROWNUM = 1),
+		#{agreement})
+	</insert>
+
 
 </mapper>
