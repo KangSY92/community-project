@@ -11,6 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RegisterDTO {
 	
+	
+	public static final String LOCAL_PATH = "C:\\Users\\Foryoucom\\git\\community-project\\src\\main\\resources\\static\\img\\";
+	public static final String RESOURCES_PATH = "/img/";
+	
 	private int memberId;	
 	private String id;
 	private String name;

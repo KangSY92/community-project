@@ -17,7 +17,7 @@
 	                    <p>커뮤니티의 일원이 되어 다양한 활동에 참여하세요!</p>
 	                </div>
 
-	                <form th:action="@{/member/register}" method="post" th:object="${registerDTO}" id="registerForm" class="register-form">
+	                <form th:action="@{/member/register}" method="post" th:object="${registerDTO}" id="registerForm" class="register-form"  enctype="multipart/form-data">
 	                    <div class="form-group">
 	                        <label for="registerUsername">아이디 <span class="required">*</span></label>
 	                        <input type="text" id="registerUsername" name="username" onkeyup="idCheck()" th:field="*{id}" required>

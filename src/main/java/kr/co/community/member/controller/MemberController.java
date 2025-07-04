@@ -6,6 +6,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -28,20 +30,22 @@ public class MemberController {
 	}
 	
 	@PostMapping("/register")
-	public String register(@Valid RegisterDTO registerDTO, AgreeDTO agreeDTO, BindingResult bindingResult,HttpServletRequest request, Model model) {
+	public String register(@Valid RegisterDTO registerDTO, AgreeDTO agreeDTO, BindingResult bindingResult,HttpServletRequest request,
+							@RequestParam("profileImage") MultipartFile profileImage, Model model) {
+		
+    	
 		if(bindingResult.hasErrors()) {
 			return "member/register";
 		}
-		System.out.println("프로필 이미지 : " + request.getParameter("profileImage"));
+
 		String boxStatus = request.getParameter("marketingAgree");
 		
 		if(boxStatus == null) {
 			boxStatus = "N";
 		}
 		agreeDTO.setAgreement(boxStatus);
-		System.out.println("겟"+agreeDTO.getAgreement());
 		
-		int resert = memberService.register(registerDTO, agreeDTO);
+		int resert = memberService.register(registerDTO, agreeDTO, profileImage);
 		
 		return "index";
 	}

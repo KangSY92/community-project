@@ -12,8 +12,8 @@
 		DEFAULT,
 		null,
 		null,
-		DEFAULT,
-		'/img/profil-img.png',
+		#{registerDTO.imgName},
+		#{registerDTO.imgPath},
 		#{registerDTO.email})
 	</insert>
 		<insert id="register1">
