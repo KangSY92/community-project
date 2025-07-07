@@ -97,7 +97,22 @@ function nicknameCheck() {
 function AgreeCheckbox() {
     const box1 = document.getElementById('termsAgree');
     const box2 = document.getElementById('privacyAgree');
-    if (box1.checked && box2.checked) {
+	const box3 = document.getElementById('marketingAgreeId');
+	
+    if (box1.checked && box2.checked) { // 필수 체크 됐을 때
+		const registerForm = document.getElementById('registerForm'); // form 요소 가져오기
+		const marketingAgree = document.createElement('input');  // input 요소 생성
+		
+		marketingAgree.name = 'marketingAgree'; // <input name='marketingAgree'>
+		
+		if(box3.checked){
+			marketingAgree.value = 'Y'; // <input name='marketingAgree' value='Y'>
+		} else{
+		    marketingAgree.value = 'N'; //  <input name='marketingAgree' value='N'>
+		}
+		
+		registerForm.appendChild(marketingAgree); // form 요소 자식으로 위에서 만든 input 넣어주기
+		
         console.log("체크박스 동의")
         return true;
     } else {

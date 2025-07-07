@@ -14,6 +14,7 @@ public class AgreeDTO {
 	private int agreeId;
 	private int memberId;
 	private int termsId;
-	private String agreement;
+	private String marketingAgree;
+
 
 }

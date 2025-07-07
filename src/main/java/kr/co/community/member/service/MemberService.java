@@ -7,6 +7,6 @@ import kr.co.community.member.dto.RegisterDTO;
 
 public interface MemberService {
 	
-	int register(RegisterDTO registerDTO, AgreeDTO agreeDTO, MultipartFile profileImage);
+	void register(RegisterDTO registerDTO, AgreeDTO agreeDTO, MultipartFile profileImage);
 
 }

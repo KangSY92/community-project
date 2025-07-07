@@ -30,22 +30,17 @@ public class MemberController {
 	}
 	
 	@PostMapping("/register")
-	public String register(@Valid RegisterDTO registerDTO, AgreeDTO agreeDTO, BindingResult bindingResult,HttpServletRequest request,
-							@RequestParam("profileImage") MultipartFile profileImage, Model model) {
-		
+	public String register(@Valid RegisterDTO registerDTO, 
+						   AgreeDTO agreeDTO, 
+						   BindingResult bindingResult,
+						   @RequestParam("profileImage") MultipartFile profileImage, 
+						   Model model) {
     	
 		if(bindingResult.hasErrors()) {
 			return "member/register";
 		}
 
-		String boxStatus = request.getParameter("marketingAgree");
-		
-		if(boxStatus == null) {
-			boxStatus = "N";
-		}
-		agreeDTO.setAgreement(boxStatus);
-		
-		int resert = memberService.register(registerDTO, agreeDTO, profileImage);
+		memberService.register(registerDTO, agreeDTO, profileImage);
 		
 		return "index";
 	}

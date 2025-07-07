@@ -12,7 +12,7 @@ import lombok.Setter;
 public class RegisterDTO {
 	
 	
-	public static final String LOCAL_PATH = "C:\\Users\\Foryoucom\\git\\community-project\\src\\main\\resources\\static\\img\\";
+	public static final String LOCAL_PATH = "C:\\dev\\spring-workspace\\community-project\\src\\main\\resources\\static\\img\\";
 	public static final String RESOURCES_PATH = "/img/";
 	
 	private int memberId;	

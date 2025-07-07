@@ -22,7 +22,7 @@ public class MemberServiceImpl implements MemberService {
 	private final FileUpload fileUpload;
 
 	@Override
-	public int register(RegisterDTO registerDTO, AgreeDTO agreeDTO, MultipartFile profileImage) {
+	public void register(RegisterDTO registerDTO, AgreeDTO agreeDTO, MultipartFile profileImage) {
 		
 			String rawPassword = registerDTO.getPassword();
 		    String passEncode = passwordEncoder.encode(rawPassword);
@@ -43,13 +43,12 @@ public class MemberServiceImpl implements MemberService {
 		    	registerDTO.setImgPath(registerDTO.RESOURCES_PATH);
 		    }
 		    
-		    int regist = memberMapper.register(registerDTO, agreeDTO, profileImage);
+		    memberMapper.register(registerDTO, agreeDTO, profileImage);
 		    memberMapper.register1(agreeDTO);
 		    memberMapper.register2(agreeDTO);
 		    memberMapper.register3(agreeDTO);
 		    
-		    
-		return regist;
+
 	} 
 	
 }

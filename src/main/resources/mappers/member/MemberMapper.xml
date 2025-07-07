@@ -52,7 +52,7 @@
 		WHERE TITLE = '마케팅 정보 수신 동의(선택)'
 		ORDER BY CREATE_DATE DESC)
 		WHERE ROWNUM = 1),
-		#{agreement})
+		#{marketingAgree})
 	</insert>
 
 
