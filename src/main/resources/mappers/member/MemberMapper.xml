@@ -16,7 +16,7 @@
 		#{registerDTO.imgPath},
 		#{registerDTO.email})
 	</insert>
-		<insert id="register1">
+		<insert id="termsAgree">
 		INSERT INTO AGREE VALUES(agree_seq.nextval,
 		(SELECT member_id FROM (
             SELECT member_id FROM MEMBER ORDER BY MEMBER_ID DESC
@@ -29,7 +29,7 @@
 		'Y')
 	</insert>
 
-		<insert id="register2">
+		<insert id="privacyAgree">
 		INSERT INTO AGREE VALUES(agree_seq.nextval,
 		(SELECT member_id FROM (
             SELECT member_id FROM MEMBER ORDER BY MEMBER_ID DESC
@@ -42,7 +42,7 @@
 		'Y')
 	</insert>
 
-	<insert id="register3">
+	<insert id="marketingAgree">
 		INSERT INTO AGREE VALUES(agree_seq.nextval,
 		(SELECT member_id FROM (
             SELECT member_id FROM MEMBER ORDER BY MEMBER_ID DESC

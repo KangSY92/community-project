@@ -104,6 +104,7 @@ function AgreeCheckbox() {
 		const marketingAgree = document.createElement('input');  // input 요소 생성
 		
 		marketingAgree.name = 'marketingAgree'; // <input name='marketingAgree'>
+		marketingAgree.style.display = 'none';
 		
 		if(box3.checked){
 			marketingAgree.value = 'Y'; // <input name='marketingAgree' value='Y'>
