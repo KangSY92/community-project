@@ -54,6 +54,24 @@
 		WHERE ROWNUM = 1),
 		#{marketingAgree})
 	</insert>
+	
+	<resultMap id="loginResultMap" type="kr.co.community.member.dto.RegisterDTO">
+		<result column="MEMBER_ID" property="memberId" />
+		<result column="ID" property="id" />
+		<result column="NAME" property="name" />
+		<result column="PASSWORD" property="password" />
+		<result column="STATUS" property="status" />
+		<result column="CREATED_AT" property="createdAt" />
+		<result column="UPDATED_AT" property="updatedAt" />
+		<result column="DROP_DATE" property="dropDate" />
+		<result column="IMG_NAME" property="imgName" />
+		<result column="IMG_PATH" property="imgPath" />
+		<result column="EMAIL" property="email" />
+	</resultMap>
+	
+	<select id="login" resultMap="loginResultMap">
+		SELECT * FROM MEMBER WHERE id=#{id}
+	</select>
 
 
 </mapper>

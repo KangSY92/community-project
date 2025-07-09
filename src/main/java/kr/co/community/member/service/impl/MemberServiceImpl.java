@@ -76,4 +76,15 @@ public class MemberServiceImpl implements MemberService {
 
 	}
 
+	public RegisterDTO login(RegisterDTO registerDTO) {
+	
+		RegisterDTO result = memberMapper.login(registerDTO);
+		
+		if(passwordEncoder.matches(registerDTO.getPassword(), result.getPassword())){
+			return result;
+		}
+		
+		return null;
+	}
+
 }
