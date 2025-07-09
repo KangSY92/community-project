@@ -63,7 +63,7 @@ public class MemberController {
     	
 		//유효성 검사 오류가 있는 경우 회원가입 폼으로 되돌아감
 		if(bindingResult.hasErrors()) {
-			return "member/register";
+			return "redirect:/member/register/form";
 		}
 
 		//회원가입 처리 서비스 호출
