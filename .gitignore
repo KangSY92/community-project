@@ -1,3 +1,6 @@
+src/main/resources/static/img/
+!src/main/resources/static/img/profil-img.png
+
 HELP.md
 .gradle
 build/

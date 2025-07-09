@@ -39,52 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // 로그인 폼 제출 처리
-  const loginForm = document.getElementById('loginForm');
-  if (loginForm) {
-    loginForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      
-      // 여기에 실제 로그인 처리 코드 추가
-      // 샘플 로그인 처리 (실제 구현에서는 서버와 통신)
-      if (username && password) {
-        alert('로그인 성공! 환영합니다.');
-        loginModal.style.display = 'none';
-        
-        // 로그인 상태 변경
-        updateLoginStatus(username);
-      } else {
-        alert('아이디와 비밀번호를 입력해주세요.');
-      }
-    });
-  }
-  
-  // 회원가입 폼 제출 처리
-  const registerForm = document.getElementById('registerForm');
-  if (registerForm) {
-    registerForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const username = document.getElementById('registerUsername').value;
-      const password = document.getElementById('registerPassword').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      const email = document.getElementById('registerEmail').value;
-      const nickname = document.getElementById('registerNickname').value;
-      
-      // 비밀번호 확인
-      if (password !== confirmPassword) {
-        //alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
-        return;
-      }
-      
-      // 여기에 실제 회원가입 처리 코드 추가
-      // 샘플 회원가입 처리 (실제 구현에서는 서버와 통신)
-      //alert('회원가입이 완료되었습니다! 로그인해주세요.');
-      //window.location.href = 'index.html';
-    });
-  }
-  
   // 프로필 이미지 미리보기
   const profileImage = document.getElementById('profileImage');
   const uploadProfileBtn = document.getElementById('uploadProfileBtn');

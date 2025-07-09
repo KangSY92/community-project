@@ -97,7 +97,23 @@ function nicknameCheck() {
 function AgreeCheckbox() {
     const box1 = document.getElementById('termsAgree');
     const box2 = document.getElementById('privacyAgree');
-    if (box1.checked && box2.checked) {
+	const box3 = document.getElementById('marketingAgreeId');
+	
+    if (box1.checked && box2.checked) { // 필수 체크 됐을 때
+		const registerForm = document.getElementById('registerForm'); // form 요소 가져오기
+		const marketingAgree = document.createElement('input');  // input 요소 생성
+		
+		marketingAgree.name = 'marketingAgree'; // <input name='marketingAgree'>
+		marketingAgree.style.display = 'none';
+		
+		if(box3.checked){
+			marketingAgree.value = 'Y'; // <input name='marketingAgree' value='Y'>
+		} else{
+		    marketingAgree.value = 'N'; //  <input name='marketingAgree' value='N'>
+		}
+		
+		registerForm.appendChild(marketingAgree); // form 요소 자식으로 위에서 만든 input 넣어주기
+		
         console.log("체크박스 동의")
         return true;
     } else {
@@ -112,11 +128,9 @@ function allCheck() {
     if (idFlag && passFlag && emailFlag && nicknameFlag && confirmFlag && AgreeCheckbox()) {
         console.log("다 참")
         alert('회원가입이 완료되었습니다! 로그인해주세요.');
-        return true
     } else if (idFlag && passFlag && emailFlag && nicknameFlag && confirmFlag) {
         console.log("체크박스 거짓")
         alert('이용약관 동의는 필수입니다.');
-        return false
     } else {
         console.log(!idFlag);
         alert('형식이 일치하지 않습니다.');
