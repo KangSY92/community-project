@@ -70,7 +70,7 @@
 	</resultMap>
 	
 	<select id="login" resultMap="loginResultMap">
-		SELECT * FROM MEMBER WHERE id=#{id}
+		SELECT id, name, password, img_name, img_path, email FROM MEMBER WHERE id=#{id}
 	</select>
 
 

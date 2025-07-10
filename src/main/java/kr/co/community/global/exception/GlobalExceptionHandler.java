@@ -1,5 +1,6 @@
 package kr.co.community.global.exception;
 
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -10,6 +11,7 @@ import kr.co.community.member.exception.MemberException;
  * 
  * 이 클래스는 애플리케이션 전반에서 발생할 수 있는 MemberException 예외를 처리합니다.
  */
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
 	/**

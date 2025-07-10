@@ -14,7 +14,8 @@
 	         <li>
 	           <div class="profile-upload">
 	             <div class="profile-preview header-profile" id="headerProfilePreview">
-	               <img src="/img/profil-img.png" alt="기본 프로필">
+	               <img th:if="${session.imgName == null}" src="/img/profil-img.png" alt="기본 프로필">
+				   <img th:if="${session.imgName != null}" th:src="@{|${session.imgPath}${session.imgName}|}">
 	             </div>
 	           </div>
 	         </li>

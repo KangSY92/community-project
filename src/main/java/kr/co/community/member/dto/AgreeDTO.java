@@ -26,8 +26,8 @@ public class AgreeDTO {
 	
 	/** 약관 고유 ID (이용약관, 개인정보처리방침, 마케팅수신 구분용) */
 	private int termsId;
-	
-	/** 카메팅 수신 동의 여부 ("Y" 또는 "N") */
+
+	/** 마케팅 수신 동의 여부 ("Y" 또는 "N") */
 	private String marketingAgree;
 
 

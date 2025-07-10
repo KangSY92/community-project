@@ -8,11 +8,9 @@
   <header th:insert="~{fragments/common/header :: header}"></header>
 
   <div th:if="${loginFailMsg}">
-    <script th:inline="javascript">
-      /*<![CDATA[*/
-	  alert([[${loginFailMsg}]]);
-      /*]]>*/
-    </script>
+	<script th:inline="javascript">
+		alert([[${loginFailMsg}]]);
+	</script>
   </div>
 
   <main>

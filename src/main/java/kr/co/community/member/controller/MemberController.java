@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
+import kr.co.community.member.exception.MemberException;
 import kr.co.community.member.service.impl.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 
@@ -79,36 +80,25 @@ public class MemberController {
 	 * 로그인 요청을 처리합니다.
 	 * 
 	 * 로그인 성공시 사용자 정보를 세션에 저장하고 메인 페이지로 리다이렉트합니다.
-	 * 실패시 오류 메시지를 flash attribute로 전달합니다.
 	 * 
 	 * @param registerDTO 로그인정보(아이디, 비밀번호)
 	 * @param session 현재 세션
-	 * @param redirectAttributes 리다이렉트시 오류 메시지 전달용 객체
 	 * @return 메인페이지로 리다이렉트
 	 */
 	@PostMapping("/login")
 	public String login(RegisterDTO registerDTO, HttpSession session, RedirectAttributes redirectAttributes) {
-		
-		RegisterDTO result = memberService.login(registerDTO);
-		
-		System.out.println("1111");
-		
-		if(result != null) {
-			System.out.println("2222");
-			session.setAttribute("memberId", result.getMemberId());
+
+			RegisterDTO result = memberService.login(registerDTO);
+			
 			session.setAttribute("id", result.getId());
 			session.setAttribute("name", result.getName());
 			session.setAttribute("email", result.getEmail());
-			session.setAttribute("status", result.getStatus());
 			session.setAttribute("imgName", result.getImgName());
 			session.setAttribute("imgPath", result.getImgPath());
-			
+
 			return "redirect:/";
-		} else {
-		System.out.println("333333");
-		redirectAttributes.addFlashAttribute("loginFailMsg", "아이디 또는 비밀번호가 틀렸습니다.");
-		return "redirect:/";
-		}
+
+
 	}
 	
 	/**
