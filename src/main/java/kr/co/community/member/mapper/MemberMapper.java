@@ -48,4 +48,6 @@ public interface MemberMapper {
 	 * @param agreeDTO 약관 동의 정보
 	 */
 	void marketingAgree(AgreeDTO agreeDTO);
+
+	RegisterDTO login(RegisterDTO registerDTO);
 }

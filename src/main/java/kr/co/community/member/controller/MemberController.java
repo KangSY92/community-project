@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
+import kr.co.community.member.exception.MemberException;
 import kr.co.community.member.service.impl.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 
@@ -52,7 +55,7 @@ public class MemberController {
 	 * @param bindingResult registerDTO에 대한 유효성 검사 결과를 담는 객체
 	 * @param profileImage 사용자가 업로드한 프로필 이미지 파일
 	 * @param model 뷰에 전달할 모델 객체
-	 * @return 회원가입 성공 시 메인 페이지로 이동, 유효성 검사 실패 시 회원가입 페이지로 다시 이동
+	 * @return 회원가입 성공 시 메인 페이지로, 유효성 검사 실패 시 회원가입 페이지로 리다이렉트
 	 */
 	@PostMapping("/register")
 	public String register(@Valid RegisterDTO registerDTO, 
@@ -70,8 +73,46 @@ public class MemberController {
 		memberService.register(registerDTO, agreeDTO, profileImage);
 		
 		//메인페이지로 이동
-		return "index";
+		return "redirect:/";
 	}
 	
+	/**
+	 * 로그인 요청을 처리합니다.
+	 * 
+	 * 로그인 성공시 사용자 정보를 세션에 저장하고 메인 페이지로 리다이렉트합니다.
+	 * 
+	 * @param registerDTO 로그인정보(아이디, 비밀번호)
+	 * @param session 현재 세션
+	 * @return 메인페이지로 리다이렉트
+	 */
+	@PostMapping("/login")
+	public String login(RegisterDTO registerDTO, HttpSession session, RedirectAttributes redirectAttributes) {
+
+			RegisterDTO result = memberService.login(registerDTO);
+			
+			session.setAttribute("id", result.getId());
+			session.setAttribute("name", result.getName());
+			session.setAttribute("email", result.getEmail());
+			session.setAttribute("imgName", result.getImgName());
+			session.setAttribute("imgPath", result.getImgPath());
+
+			return "redirect:/";
+
+
+	}
+	
+	/**
+	 * 로그아웃 요청을 처리하는 메서드입니다.
+	 * 
+	 * 현재 로그인 된 사용자 세션을 무효화하고 메인 페이지로 리다이렉트 합니다.
+	 * 
+	 * @param session 현재  HPPT 세션 객체
+	 * @return 로그아웃 처리 후 메인 페이지로 리다이렉트
+	 */
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+			session.invalidate(); // 세션 무효화
+		return "redirect:/";
+	}
 
 }

@@ -8,12 +8,14 @@
 	         <li><a href="/" class="active">홈</a></li>
 	         <li><a href="board.html">게시판</a></li>
 	     <!--    <li><a href="upload.html">업로드</a></li>-->
-	         <li><a href="#" id="loginBtn">로그인</a></li>
-	         <li><a href="/member/register/form">회원가입</a></li>
+	         <li th:if="${session.name == null}"><a href="#" id="loginBtn">로그인</a></li>
+	         <li th:if="${session.name == null}"><a href="/member/register/form">회원가입</a></li>
+			 <li th:if="${session.name != null}"><a href="/member/logout">로그아웃</a></li>
 	         <li>
 	           <div class="profile-upload">
 	             <div class="profile-preview header-profile" id="headerProfilePreview">
-	               <img src="/img/profil-img.png" alt="기본 프로필">
+	               <img th:if="${session.imgName == null}" src="/img/profil-img.png" alt="기본 프로필">
+				   <img th:if="${session.imgName != null}" th:src="@{|${session.imgPath}${session.imgName}|}">
 	             </div>
 	           </div>
 	         </li>

@@ -7,11 +7,18 @@
 
   <header th:insert="~{fragments/common/header :: header}"></header>
 
+  <div th:if="${loginFailMsg}">
+	<script th:inline="javascript">
+		alert([[${loginFailMsg}]]);
+	</script>
+  </div>
 
   <main>
     <section class="hero">
       <div class="container">
-        <h2>환영합니다!</h2>
+        <h2 		th:text="${session.name != null
+										? session.name + '님 환영합니다.'
+									    : '환영합니다'}"></h2>
         <p>자유롭게 소통하고 정보를 나누는 커뮤니티 공간입니다.</p>
       </div>
     </section>
@@ -58,23 +65,25 @@
 
   <footer th:insert="~{fragments/common/footer :: footer}"></footer>
   <!-- 로그인 모달 -->
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>로그인</h2>
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="username">아이디</label>
-          <input type="text" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-          <label for="password">비밀번호</label>
-          <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">로그인</button>
-      </form>
-      <p class="text-center">계정이 없으신가요? <a href="register.html">회원가입</a></p>
+    <div  id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>로그인</h2>
+        <form th:action="@{/member/login}" method="post" id="loginForm">
+          <div class="form-group">
+            <label for="username">아이디</label>
+            <input type="text" id="id" name="id" required>
+          </div>
+          <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">로그인</button>
+        </form>
+        <p class="text-center">계정이 없으신가요? <a href="register.html">회원가입</a></p>
+      </div>
     </div>
+  </body>
   </div>
 </body>
 </html>
