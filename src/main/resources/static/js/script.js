@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    if (postForm) {
+/*    if (postForm) {
       postForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const title = document.getElementById('postTitle').value;
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('게시글이 등록되었습니다.');
         window.location.href = 'board.html';
       });
-    }
+    }*/
   }
   
   // 로그인 상태 변경 함수
