@@ -12,8 +12,8 @@ import lombok.Setter;
 public class BoardDTO {
 
 	private int boardId;
-	private String id;
 	private String title;
+	private String author;
 	private String content;
 	private int viewCount;
 	private String createDate;

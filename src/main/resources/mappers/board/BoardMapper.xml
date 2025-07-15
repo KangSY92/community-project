@@ -3,16 +3,30 @@
 
 <mapper namespace="kr.co.community.board.mapper.BoardMapper">
 
+	<resultMap id="boardResultMap" type="kr.co.community.board.dto.BoardDTO">
+		<result column="board_id" property="boardId" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="view_count" property="viewCount" />
+		<result column="create_date" property="createDate" />
+		<result column="author" property="author" />
+	</resultMap>
+	
 	<insert id="create">
 	INSERT INTO BOARD VALUES(board_seq.nextval,
-							 #{id},
 							 #{title},
 							 #{content},
 							 DEFAULT,
 							 DEFAULT,
 							 null,
-							 null
+							 null,
+							 #{author}
 							 )
 	</insert>
+
+	<select id="getList" resultMap="boardResultMap">
+	SELECT BOARD_ID, TITLE, CONTENT, VIEW_COUNT, CREATE_DATE, AUTHOR FROM BOARD
+	ORDER BY CREATE_DATE DESC
+	</select>
 
 </mapper>

@@ -1,5 +1,7 @@
 package kr.co.community.board.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import kr.co.community.board.dto.BoardDTO;
@@ -15,6 +17,10 @@ public class BoardServiceImpl implements BoardService {
 
 	public void create(BoardDTO boardDTO, String sessionID) {
 		boardMapper.create(boardDTO);
+	}
+
+	public List<BoardDTO> getList() {
+		return boardMapper.getList();
 	}
 
 }

@@ -33,40 +33,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>5</td>
-                <td class="title"><a href="view-post.html?id=5">사진 첨부 테스트입니다</a> <span class="attachment-icon">📁</span></td>
-                <td>user123</td>
-                <td>2025-06-08</td>
-                <td>42</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td class="title"><a href="view-post.html?id=4">오늘 점심 메뉴 추천해주세요!</a> <span class="comment-count">[3]</span></td>
-                <td>foodie</td>
-                <td>2025-06-07</td>
-                <td>128</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td class="title"><a href="view-post.html?id=3">주말에 가볼만한 곳 추천</a> <span class="attachment-icon">📁</span> <span class="comment-count">[5]</span></td>
-                <td>traveler</td>
-                <td>2025-06-06</td>
-                <td>156</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td class="title"><a href="view-post.html?id=2">커뮤니티 사이트 오픈 축하합니다!</a></td>
-                <td>admin</td>
-                <td>2025-06-05</td>
-                <td>210</td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td class="title"><a href="view-post.html?id=1">커뮤니티 이용 안내</a></td>
-                <td>admin</td>
-                <td>2025-06-05</td>
-                <td>315</td>
+              <tr th:each="board, iterStat : ${boards}">
+                <td th:text="${board.boardId}"></td>
+                <td th:text="${board.title}"></td>
+                <td th:text="${board.author}"></td>
+                <td th:text="${board.createDate}"></td>
+                <td th:text="${board.viewCount}"></td>
               </tr>
             </tbody>
           </table>

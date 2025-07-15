@@ -1,5 +1,7 @@
 package kr.co.community.board.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.community.board.dto.BoardDTO;
@@ -8,5 +10,7 @@ import kr.co.community.board.dto.BoardDTO;
 public interface BoardMapper {
 
 	void create(BoardDTO boardDTO);
+
+	List<BoardDTO> getList();
 
 }
