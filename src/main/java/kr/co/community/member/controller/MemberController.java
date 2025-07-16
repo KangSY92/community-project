@@ -1,5 +1,6 @@
 package kr.co.community.member.controller;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,19 +22,22 @@ import lombok.RequiredArgsConstructor;
 /**
  * 회원 관련 요청을 처리하는 컨트롤러 클래스입니다.
  * 
- * 회원가입 폼 페이지 요청 및 회원가입 처리기능을 제공합니다.
- * 
- * 회원가입 처리시 MemberServiceImpl을 통해 실제 비지니스 로직을 위임합니다.
+ * 기능 : 
+ * - 회원가입 폼 페이지 반환
+ * - 회원가입 처리
+ * - 로그인 및 세션 저장
+ * - 로그아웃 처리
  */
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
 	
-	/**
-	 * 회원 관련 비지니스 로직을 처리하는 서비스 객체
-	 */
+	/** 회원 서비스 로직을 처리하는 객체 */
     private final MemberServiceImpl memberService;
+    
+    /** 비밀번호 암호화를 위한 객체 */
+    private final PasswordEncoder passwordEncoder;
 	
     /**
      * 회원가입 폼 페이지를 보여주는 메서드 입니다.
@@ -48,41 +52,54 @@ public class MemberController {
 	}
 	
 	/**
-	 * 회원가입 폼 데이터를 처리하는 메서드 입니다.
+	 * 회원가입 요청을 처리합니다.
 	 * 
-	 * @param registerDTO 사용자로부터 입력받은 회원 정보 DTO
-	 * @param agreeDTO 이용약관 동의 정보 DTO
-	 * @param bindingResult registerDTO에 대한 유효성 검사 결과를 담는 객체
-	 * @param profileImage 사용자가 업로드한 프로필 이미지 파일
+	 * 유효성 검사 오류가 있을 경우 회원가입 폼으로 리다이렉트 합니다.
+	 * 회원가입 성공 시 메인 페이지로 이동하고, 실패시 실패 메시지를 전달합니다.
+	 * 
+	 * @param registerDTO 회원정보 DTO
+	 * @param agreeDTO 약관 동의 정보 DTO
+	 * @param bindingResult 유효성 검사 결과
+	 * @param profileImage 업로드된 프로필 이미지
+	 * @param redirectAttributes FlashAttribute 전달 객체
 	 * @param model 뷰에 전달할 모델 객체
-	 * @return 회원가입 성공 시 메인 페이지로, 유효성 검사 실패 시 회원가입 페이지로 리다이렉트
+	 * @return 리다이렉트 대상 경로
 	 */
 	@PostMapping("/register")
 	public String register(@Valid RegisterDTO registerDTO, 
 						   AgreeDTO agreeDTO, 
 						   BindingResult bindingResult,
-						   @RequestParam("profileImage") MultipartFile profileImage, 
+						   @RequestParam("profileImage") MultipartFile profileImage,
+						   RedirectAttributes redirectAttributes,
 						   Model model) {
     	
-		//유효성 검사 오류가 있는 경우 회원가입 폼으로 되돌아감
-		if(bindingResult.hasErrors()) {
-			return "redirect:/member/register/form";
+		try {
+			if(bindingResult.hasErrors()) {
+				//유효성 검사 오류가 있는 경우 회원가입 폼으로 되돌아감
+				return "redirect:/member/register/form";
+			}
+			
+			//회원가입 처리 서비스 호출
+			memberService.register(registerDTO, agreeDTO, profileImage);
+			redirectAttributes.addFlashAttribute("registMsg", "회원가입에 성공했습니다.");
+			//메인페이지로 이동
+			return "redirect:/";
+			
+		} catch(Exception e) {
+			redirectAttributes.addFlashAttribute("registMsg", "회원가입에 실패했습니다.");
+			return "redirect:/member/register/form"; 
 		}
-
-		//회원가입 처리 서비스 호출
-		memberService.register(registerDTO, agreeDTO, profileImage);
-		
-		//메인페이지로 이동
-		return "redirect:/";
 	}
 	
 	/**
 	 * 로그인 요청을 처리합니다.
 	 * 
 	 * 로그인 성공시 사용자 정보를 세션에 저장하고 메인 페이지로 리다이렉트합니다.
+	 * 실패시 실패 메시지를 전달합니다.
 	 * 
-	 * @param registerDTO 로그인정보(아이디, 비밀번호)
-	 * @param session 현재 세션
+	 * @param registerDTO 로그인 요청 정보(아이디, 비밀번호)
+	 * @param session 현재 HTTP 세션
+	 * @param redirectAttributes FlashAttribute 전달 객체
 	 * @return 메인페이지로 리다이렉트
 	 */
 	@PostMapping("/login")
@@ -90,6 +107,16 @@ public class MemberController {
 
 			RegisterDTO result = memberService.login(registerDTO);
 			
+	        if (result == null) {
+	        	redirectAttributes.addFlashAttribute("loginFailMsg", "존재하지 않는 사용자입니다.");
+	        	return "redirect:/";
+	        }
+
+	        if (!passwordEncoder.matches(registerDTO.getPassword(), result.getPassword())) {
+	        	redirectAttributes.addFlashAttribute("loginFailMsg", "비밀번호가 일치하지 않습니다.");
+	        	return "redirect:/";
+	        }
+
 			session.setAttribute("id", result.getId());
 			session.setAttribute("name", result.getName());
 			session.setAttribute("email", result.getEmail());
@@ -98,7 +125,6 @@ public class MemberController {
 
 			return "redirect:/";
 
-
 	}
 	
 	/**
@@ -106,7 +132,7 @@ public class MemberController {
 	 * 
 	 * 현재 로그인 된 사용자 세션을 무효화하고 메인 페이지로 리다이렉트 합니다.
 	 * 
-	 * @param session 현재  HPPT 세션 객체
+	 * @param session 현재 HPPT 세션 객체
 	 * @return 로그아웃 처리 후 메인 페이지로 리다이렉트
 	 */
 	@GetMapping("/logout")

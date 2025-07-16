@@ -8,6 +8,11 @@
 	<header th:insert="~{fragments/common/header :: header}"></header>
 	
 	<main>
+		<script th:if="${registMsg != null}" th:inline="javascript">
+			alert([[${registMsg}]]);
+		</script>
+
+		
 	    <section class="register">
 	        <div class="container">
 	            <div class="register-container">
