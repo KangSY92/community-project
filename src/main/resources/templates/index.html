@@ -12,6 +12,10 @@
 		alert([[${loginFailMsg}]]);
 	</script>
   </div>
+  
+  <script th:if="${boardCreateMsg != null}" th:inline="javascript">
+      alert([[${boardCreateMsg}]]);
+  </script>
 
   <main>
     <section class="hero">

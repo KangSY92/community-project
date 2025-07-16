@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import kr.co.community.board.dto.BoardDTO;
+import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.mapper.BoardMapper;
 import kr.co.community.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,12 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.create(boardDTO);
 	}
 
-	public List<BoardDTO> getList() {
-		return boardMapper.getList();
+	public List<BoardDTO> getList(PageDTO pi) {
+		return boardMapper.getList(pi);
+	}
+
+	public int getTotalCount(BoardDTO boardDTO) {
+		return boardMapper.getTotalCount(boardDTO);
 	}
 
 }

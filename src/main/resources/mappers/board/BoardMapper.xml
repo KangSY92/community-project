@@ -25,8 +25,15 @@
 	</insert>
 
 	<select id="getList" resultMap="boardResultMap">
-	SELECT BOARD_ID, TITLE, CONTENT, VIEW_COUNT, CREATE_DATE, AUTHOR FROM BOARD
-	ORDER BY CREATE_DATE DESC
+<!--	SELECT BOARD_ID, TITLE, CONTENT, VIEW_COUNT, CREATE_DATE, AUTHOR FROM BOARD
+	ORDER BY CREATE_DATE DESC-->
+	
+	SELECT * FROM ( SELECT
+		board_id, title, author, content, view_count, create_date, ROW_NUMBER() OVER(ORDER BY create_date DESC) AS rn
+		FROM BOARD b) WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
 	</select>
 
+	<select id="getTotalCount">
+	SELECT count(*) FROM BOARD WHERE DROP_DATE IS NULL
+	</select>
 </mapper>

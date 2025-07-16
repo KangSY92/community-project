@@ -19,4 +19,6 @@ public class BoardDTO {
 	private String createDate;
 	private String updateDate;
 	private String dropDate;
+	
+	private String text = "";
 }
