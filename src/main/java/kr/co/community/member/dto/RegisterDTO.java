@@ -21,7 +21,6 @@ public class RegisterDTO {
 	/**
 	 * 로컬 저장소 내 이미지 저장 경로
 	 */
-	
 	public static final String LOCAL_PATH = "C:\\Users\\Foryoucom\\git\\community-project\\src\\main\\resources\\static\\img\\";
 	
 	/**

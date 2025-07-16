@@ -127,12 +127,9 @@ function AgreeCheckbox() {
 function allCheck() {
     if (idFlag && passFlag && emailFlag && nicknameFlag && confirmFlag && AgreeCheckbox()) {
         console.log("다 참")
-        alert('회원가입이 완료되었습니다! 로그인해주세요.');
     } else if (idFlag && passFlag && emailFlag && nicknameFlag && confirmFlag) {
         console.log("체크박스 거짓")
-        alert('이용약관 동의는 필수입니다.');
     } else {
         console.log(!idFlag);
-        alert('형식이 일치하지 않습니다.');
     }
 }

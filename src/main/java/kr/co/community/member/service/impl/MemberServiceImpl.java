@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.community.global.transaction.TransactionHandler;
 import kr.co.community.member.dto.AgreeDTO;
@@ -20,8 +21,11 @@ import lombok.RequiredArgsConstructor;
 /**
  * MemberService 인터페이스의 구현제로, 회원가입 관련 비지니스 로직을 처리합니다.
  * 
- * 주요 기능 - 비밀번호 암호화 - 프로필 이미지 업로드 및 기본 이미지 처리 - 회원 정보 및 약관 동의 내역 DB 저장 - 예외 발생 시
- * MemberException으로 래핑하여 처리
+ * 기능 : 
+ * - 비밀번호 암호화
+ * - 프로필 이미지 업로드 또는 기본 이미지 설정
+ * - 회원 정보 및 약관 동의 내역 저장
+ * - 예외 발생 시 MemberExcption 처리
  */
 @Service
 @RequiredArgsConstructor
@@ -40,7 +44,10 @@ public class MemberServiceImpl implements MemberService {
 	private final TransactionHandler transactionHandler;
 
 	/**
-	 * 회원정보를 등록하고, 약관동의 등의 정보를 저장합니다.
+	 * 회원가입 요청을 처리합니다.
+	 * 
+	 * 비밀번호 암호화, 프로필 이미지 업로드 또는 기본 이미지 지정, 회원 정보 및 약관 동의 정보 저장을 수행합니다.
+	 * 트랜잭션 중 오류가 발생하면 롤백 처리 후 MemberException을 발생시킵니다.
 	 * 
 	 * @param registerDTO  사용자로부터 입력받은 회원가입 정보 DTO
 	 * @param agreeDTO     사용자 약관 동의 정보 DTO
@@ -77,6 +84,9 @@ public class MemberServiceImpl implements MemberService {
 			memberMapper.privacyAgree(agreeDTO);
 			memberMapper.marketingAgree(agreeDTO);
 
+			// 모든 작업 성공시 커밋
+			transactionManager.commit(status);
+			
 		} catch (IOException e) {
 			// 파일 업로드 중 예외 발생 시 롤백 처리
 			transactionManager.rollback(status);
@@ -87,30 +97,21 @@ public class MemberServiceImpl implements MemberService {
 			throw new MemberException("회원가입 중 오류가 발생했습니다.", e);
 		}
 
-		// 모든 작업 성공시 커밋
-		transactionManager.commit(status);
-
 	}
 
 	/**
 	 * 로그인 요청을 처리합니다.
 	 * 
+	 * 로그인 시도 후 결과를 반환하며, 로그인 실패 또는 시스템 오류 발생 시 MemberException을 발생시킵니다.
+	 * 
 	 *  @param registerDTO 로그인 요청 시 입력된 ID/PW 정보가 담긴 DTO
-	 *  @return 로그인 성공 시 사용자 정보 반환, 비밀번호가 일치하지 않거나 회원 정보가 없을시 null 반환
+	 *  @return 로그인 성공 시 사용자 정보 반환, 실패시 null
 	 *  @throws MemberException 로그인 처리 중 예외가 발생하면 해당 예외를 던집니다.
 	 */
 	public RegisterDTO login(RegisterDTO registerDTO) {
 
 	    try {
 	        RegisterDTO result = memberMapper.login(registerDTO);
-
-	        if (result == null) {
-	            throw new MemberException("존재하지 않는 사용자입니다.", null);
-	        }
-
-	        if (!passwordEncoder.matches(registerDTO.getPassword(), result.getPassword())) {
-	            throw new MemberException("비밀번호가 일치하지 않습니다.", null);
-	        }
 
 	        return result;
 
