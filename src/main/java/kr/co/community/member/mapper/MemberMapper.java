@@ -49,5 +49,11 @@ public interface MemberMapper {
 	 */
 	void marketingAgree(AgreeDTO agreeDTO);
 
+	/**
+	 * 사용자 로그인 시, 입력된 ID에 해당하는 회원 정보를 조회합니다.
+	 * 
+	 * @param registerDTO 로그인 요청 정보(아이디, 비밀번호)
+	 * @return 회원정보가 존재하면 해당 정보를 반환, 없으면 null
+	 */
 	RegisterDTO login(RegisterDTO registerDTO);
 }
