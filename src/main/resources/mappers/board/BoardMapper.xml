@@ -25,15 +25,30 @@
 	</insert>
 
 	<select id="getList" resultMap="boardResultMap">
-<!--	SELECT BOARD_ID, TITLE, CONTENT, VIEW_COUNT, CREATE_DATE, AUTHOR FROM BOARD
-	ORDER BY CREATE_DATE DESC-->
-	
 	SELECT * FROM ( SELECT
-		board_id, title, author, content, view_count, create_date, ROW_NUMBER() OVER(ORDER BY create_date DESC) AS rn
-		FROM BOARD b) WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
+		board_id, title, author, content, view_count, create_date, drop_date, ROW_NUMBER() OVER(ORDER BY create_date DESC) AS rn
+		FROM BOARD b WHERE DROP_DATE IS NULL) WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
 	</select>
 
 	<select id="getTotalCount">
 	SELECT count(*) FROM BOARD WHERE DROP_DATE IS NULL
 	</select>
+	
+	<select id="detail" resultMap="boardResultMap">
+	SELECT * FROM BOARD WHERE board_id = #{boardId}
+	AND DROP_DATE IS NULL
+	</select>
+	
+	<update id="viewCount">
+	UPDATE BOARD
+	SET view_count = view_count+1
+	WHERE board_id = #{boardId}
+	AND DROP_DATE IS NULL
+	</update>
+	
+	<update id="delete">
+	UPDATE BOARD
+	SET DROP_DATE = SYSDATE
+	WHERE BOARD_ID = #{boardId}
+	</update>
 </mapper>

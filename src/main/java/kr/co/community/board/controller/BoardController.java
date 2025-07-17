@@ -30,6 +30,7 @@ public class BoardController {
 	private final BoardServiceImpl boardService;
 	
 	private final Pagenation pagenation;
+	
 	/**
 	 * 게시글 목록 페이지로 이동합니다.
 	 * 
@@ -85,5 +86,47 @@ public class BoardController {
 		
 		boardService.create(boardDTO, sessionID);
 		return "redirect:/board/list";
+	}
+	
+	/**
+	 * 게시글 상세 페이지로 이동합니다.
+	 * 
+	 * @param boardId 조회할 게시글 ID
+	 * @param model 뷰에 전달할 모델 객체
+	 * @return 게시글 상세 화면의 뷰 이름(board/view-post)
+	 */
+	@GetMapping("/detail")
+	public String detail(@RequestParam(name="boardId") int boardId, Model model) {
+		BoardDTO result = boardService.detail(boardId);
+		model.addAttribute("board", result);
+		return "board/view-post";
+	}
+	
+	/**
+	 * 게시글 삭제를 처리합니다.
+	 * 로그인한 사용자의 ID와 게시글 작성자가 일치할 경우 삭제를 수행합니다.
+	 * 삭제 성공 또는 실패 메세지를 RedirectAttributes에 담아 목록 페이지로 리다이렉트 합니다.
+	 * 
+	 * @param boardId 삭제할 게시글의 ID
+	 * @param author 게시글 작성자 ID
+	 * @param sessionID 세션에 저장된 로그인 사용자 ID
+	 * @param redirectAttributes 리다이렉트시 사용자 메시지 전달용 객체
+	 * @return 게시글 목록 페이지로 리다이렉트 (삭제 성공/실패에 관계 없이 redirect:/board/list)
+	 */
+	@PostMapping("/delete")
+	public String delete(@RequestParam(name="boardId") int boardId,
+						 @RequestParam(name="author") String author,
+						 @SessionAttribute("id") String sessionID,
+						 RedirectAttributes redirectAttributes) {
+		boardService.delete(boardId, author, sessionID);
+		
+		if(sessionID.equals(author)) {
+			redirectAttributes.addFlashAttribute("boardDeleteMsg", "삭제되었습니다.");
+			return "redirect:/board/list";
+		} else {
+			redirectAttributes.addFlashAttribute("boardDeleteMsg", "다른 사용자 게시글은 삭제할 수 없습니다.");
+			return "redirect:/board/list";
+		}
+		
 	}
 }

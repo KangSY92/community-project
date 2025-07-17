@@ -17,4 +17,10 @@ public interface BoardMapper {
 
 	int getTotalCount(BoardDTO boardDTO);
 
+	int viewCount(int boardId);
+
+	BoardDTO detail(int boardId);
+
+	void delete(int boardId);
+
 }

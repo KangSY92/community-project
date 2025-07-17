@@ -2,81 +2,98 @@
 <html lang="ko">
 
 <head th:insert="~{fragments/common/head :: head}">
-	
+
 <body>
 
 	<header th:insert="~{fragments/common/header :: header}"></header>
 
-  <main>
-    <section class="board">
-      <div class="container">
-        <div class="board-header">
-          <h2>게시판</h2>
-          <div class="board-actions">
-            <div class="search-box">
-              <input type="text" placeholder="검색어를 입력하세요">
-              <button type="button" class="btn">검색</button>
-            </div>
-            <a href="/board/create/form" class="btn btn-primary">글쓰기</a>
-          </div>
-        </div>
+	<script th:if="${boardDeleteMsg != null}" th:inline="javascript">
+	    alert([[${boardDeleteMsg}]]);
+	  </script>
+	
+	<main>
+		<section class="board">
+			<div class="container">
+				<div class="board-header">
+					<h2>게시판</h2>
+					<div class="board-actions">
+						<div class="search-box">
+							<input type="text" placeholder="검색어를 입력하세요">
+							<button type="button" class="btn">검색</button>
+						</div>
+						<a href="/board/create/form" class="btn btn-primary">글쓰기</a>
+					</div>
+				</div>
 
-        <div class="board-list">
-          <table>
-            <thead>
-              <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일</th>
-                <th>조회수</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr th:each="board, iterStat : ${boards}">
-                <td th:text="${board.boardId}"></td>
-                <td th:text="${board.title}"></td>
-                <td th:text="${board.author}"></td>
-                <td th:text="${board.createDate}"></td>
-                <td th:text="${board.viewCount}"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+				<div class="board-list">
+					<table>
+						<thead>
+							<tr>
+								<th>번호</th>
+								<th>제목</th>
+								<th>작성자</th>
+								<th>작성일</th>
+								<th>조회수</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="board, iterStat : ${boards}"
+							th:attr="onclick=|location.href='@{/board/detail(boardId=${board.boardId})}'|">
+								<td th:text="${pi.row - iterStat.index}"></td>
+								<td th:text="${board.title}"></td>
+								<td th:text="${board.author}"></td>
+								<td th:text="${board.createDate}"></td>
+								<td th:text="${board.viewCount}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 
-        <div class="pagination">
-          <a href="#" class="page-link">&laquo;</a>
-          <a href="#" class="page-link active">1</a>
-          <a href="#" class="page-link">2</a>
-          <a href="#" class="page-link">3</a>
-          <a href="#" class="page-link">4</a>
-          <a href="#" class="page-link">5</a>
-          <a href="#" class="page-link">&raquo;</a>
-        </div>
-      </div>
-    </section>
-  </main>
+				<div class="pagination">
+					<!--왼쪽 버튼-->
+					<a href="#" class="page-link" th:if="${pi.currentPage <= 1}" aria-label="Previous"
+						aria-hidden="true">&laquo;</a>
+					<a class="page-link" th:if="${pi.currentPage > 1}"
+						th:href="@{/board/list(currentPage=${pi.currentPage-1})}" aria-label="Previous"
+						aria-hidden="true">&laquo;</a>
 
-  <footer th:insert="~{fragments/common/footer :: footer}"></footer>
+					<!--페이지-->
+					<a class="page-link" th:each="page : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+						th:href="@{/board/list(currentPage=${page})}" th:text="${page}"></a>
 
-  <!-- 로그인 모달 -->
-  <div  id="loginModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>로그인</h2>
-      <form th:action="@{/member/login}" method="post" id="loginForm">
-        <div class="form-group">
-          <label for="username">아이디</label>
-          <input type="text" id="id" name="id" required>
-        </div>
-        <div class="form-group">
-          <label for="password">비밀번호</label>
-          <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">로그인</button>
-      </form>
-      <p class="text-center">계정이 없으신가요? <a href="register.html">회원가입</a></p>
-    </div>
-  </div>
+					<!--오른쪽 버튼-->
+					<a class="page-link" th:if="${pi.currentPage >= pi.maxPage}" href="#" aria-label="Next"
+						aria-hidden="true">&raquo;</a>
+					<a class="page-link" th:if="${pi.currentPage < pi.maxPage}"
+						th:href="@{/board/list(currentPage=${pi.currentPage+1})}" aria-label="Next"
+						aria-hidden="true">&raquo;</a>
+
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer th:insert="~{fragments/common/footer :: footer}"></footer>
+
+	<!-- 로그인 모달 -->
+	<div id="loginModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>로그인</h2>
+			<form th:action="@{/member/login}" method="post" id="loginForm">
+				<div class="form-group">
+					<label for="username">아이디</label>
+					<input type="text" id="id" name="id" required>
+				</div>
+				<div class="form-group">
+					<label for="password">비밀번호</label>
+					<input type="password" id="password" name="password" required>
+				</div>
+				<button type="submit" class="btn btn-primary">로그인</button>
+			</form>
+			<p class="text-center">계정이 없으신가요? <a href="register.html">회원가입</a></p>
+		</div>
+	</div>
 </body>
+
 </html>
