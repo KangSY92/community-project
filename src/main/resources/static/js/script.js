@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // 게시글 삭제
   const deletePostBtn = document.getElementById('deletePostBtn');
   const deleteModal = document.getElementById('deleteModal');
-  const confirmDelete = document.getElementById('confirmDelete');
   const cancelDelete = document.getElementById('cancelDelete');
   
   if (deletePostBtn && deleteModal) {
@@ -79,13 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
     
-    if (confirmDelete) {
-      confirmDelete.addEventListener('click', function() {
-        // 여기에 실제 삭제 처리 코드 추가
-        alert('게시글이 삭제되었습니다.');
-        window.location.href = 'board.html';
-      });
-    }
   }
   
   // 파일 업로드 드롭존
@@ -231,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    if (postForm) {
+/*    if (postForm) {
       postForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const title = document.getElementById('postTitle').value;
@@ -247,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('게시글이 등록되었습니다.');
         window.location.href = 'board.html';
       });
-    }
+    }*/
   }
   
   // 로그인 상태 변경 함수

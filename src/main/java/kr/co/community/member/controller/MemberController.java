@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
-import kr.co.community.member.exception.MemberException;
 import kr.co.community.member.service.impl.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 
