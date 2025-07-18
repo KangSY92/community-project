@@ -9,6 +9,7 @@
 		<result column="content" property="content" />
 		<result column="view_count" property="viewCount" />
 		<result column="create_date" property="createDate" />
+		<result column="update_date" property="updateDate" />
 		<result column="author" property="author" />
 	</resultMap>
 	
@@ -26,7 +27,7 @@
 
 	<select id="getList" resultMap="boardResultMap">
 	SELECT * FROM ( SELECT
-		board_id, title, author, content, view_count, create_date, drop_date, ROW_NUMBER() OVER(ORDER BY create_date DESC) AS rn
+		board_id, title, author, content, view_count, create_date, update_date, drop_date, ROW_NUMBER() OVER(ORDER BY create_date DESC) AS rn
 		FROM BOARD b WHERE DROP_DATE IS NULL) WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
 	</select>
 
@@ -49,6 +50,12 @@
 	<update id="delete">
 	UPDATE BOARD
 	SET DROP_DATE = SYSDATE
+	WHERE BOARD_ID = #{boardId}
+	</update>
+	
+	<update id="edit">
+	UPDATE BOARD
+	SET TITLE = #{board.title}, CONTENT = #{board.content}, UPDATE_DATE = SYSDATE
 	WHERE BOARD_ID = #{boardId}
 	</update>
 </mapper>

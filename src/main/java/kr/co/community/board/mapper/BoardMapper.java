@@ -23,4 +23,6 @@ public interface BoardMapper {
 
 	void delete(int boardId);
 
+	void edit(@Param("board")BoardDTO boardDTO, @Param("boardId")int boardId);
+
 }

@@ -8,15 +8,21 @@
 	<header th:insert="~{fragments/common/header :: header}"></header>
 
   <main>
+	
+	<script th:if="${boardEditMsg != null}" th:inline="javascript">
+	    alert([[${boardEditMsg}]]);
+	  </script>
+	
     <section class="post-view">
       <div class="container">
         <div class="post">
           <div class="post-header">
             <h2 th:text="${board.title}"></h2>
             <div class="post-meta">
-              <span class="author" th:text="'작성자 : ' + ${board.author}">작성자: traveler</span>
-              <span class="date" th:text="'작성일 : ' + ${board.createDate}">작성일: 2025-06-06</span>
-              <span class="views" th:text="'조회수 : ' + ${board.viewCount}">조회수: 156</span>
+              <span class="author" th:text="'작성자 : ' + ${board.author}"></span>
+			  <span class="date" th:text="'작성일 : ' + ${board.createDate}"></span>
+			  <span th:if="${board.updateDate != null}" th:text="'수정일 : ' + ${board.updateDate}"></span>
+              <span class="views" th:text="'조회수 : ' + ${board.viewCount}"></span>
             </div>
           </div>
           
@@ -39,9 +45,12 @@
           </div>
           
           <div class="post-actions">
-            <a href="edit-post.html?id=3" class="btn">수정</a>
-            <button class="btn btn-danger" id="deletePostBtn">삭제</button>
-            <a onclick="window.history.back()" class="btn">목록</a>
+			<form th:action="@{/board/edit/form}" method="get">
+            <button type="submit" class="btn">수정</button>
+			<input type="hidden" name="boardId" th:value="${board.boardId}">
+            <button type="button" class="btn btn-danger" id="deletePostBtn">삭제</button>
+            <a th:href="@{/board/list}" class="btn">목록</a>
+			</form>
           </div>
         </div>
 
