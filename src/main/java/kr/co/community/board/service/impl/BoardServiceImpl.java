@@ -27,6 +27,7 @@ public class BoardServiceImpl implements BoardService {
 	 * @param boardDTO  새로 작성할 게시글 데이터
 	 * @param sessionID 현재 로그인한 사용자 세션 ID
 	 */
+	@Override
 	public void create(BoardDTO boardDTO, String sessionID) {
 		boardMapper.create(boardDTO);
 	}
@@ -37,6 +38,7 @@ public class BoardServiceImpl implements BoardService {
 	 * @param pi 페이지 및 페이징 관련 정보가 담긴 DTO
 	 * @return 게시글 리스트
 	 */
+	@Override
 	public List<BoardDTO> getList(PageDTO pi) {
 		return boardMapper.getList(pi);
 	}
@@ -47,6 +49,7 @@ public class BoardServiceImpl implements BoardService {
 	 * @param boardDTO 검색 조건 등이 포함될 수 있는 게시글 DTO
 	 * @return 전체 게시글 수
 	 */
+	@Override
 	public int getTotalCount(BoardDTO boardDTO) {
 		return boardMapper.getTotalCount(boardDTO);
 	}
@@ -57,6 +60,7 @@ public class BoardServiceImpl implements BoardService {
 	 * @param boardId 상세 조회할 게시글 ID
 	 * @return 게시글 상세 데이터
 	 */
+	@Override
 	public BoardDTO detail(int boardId) {
 		return boardMapper.detail(boardId);
 	}
@@ -67,6 +71,7 @@ public class BoardServiceImpl implements BoardService {
 	 * @param boardId 조회수 증각 대상 게시글 ID
 	 * @return 증가 처리된 결과값
 	 */
+	@Override
 	public int viewCountplus(int boardId) {
 		return boardMapper.viewCount(boardId);
 	}
@@ -76,6 +81,7 @@ public class BoardServiceImpl implements BoardService {
 	 * 
 	 * 작성자와 로그인 사용자가 일차할 경우에만 삭제합니다.
 	 */
+	@Override
 	public void delete(int boardId, String author, String sessionid) {
 		if (author.equals(sessionid)) {
 			boardMapper.delete(boardId);
@@ -89,6 +95,7 @@ public class BoardServiceImpl implements BoardService {
 	 * @param boardDTO 수정할 게시글 데이터
 	 * @param boardId 수정 대상 게시글 ID
 	 */
+	@Override
 	public void edit(BoardDTO boardDTO, int boardId) {
 		boardMapper.edit(boardDTO, boardId);
 	}

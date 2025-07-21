@@ -14,4 +14,10 @@ public interface BoardService {
 	BoardDTO detail(int boardId);
 	
 	void delete(int boardId, String author, String sessionID);
+
+	int getTotalCount(BoardDTO boardDTO);
+
+	int viewCountplus(int boardId);
+
+	void edit(BoardDTO boardDTO, int boardId);
 }
