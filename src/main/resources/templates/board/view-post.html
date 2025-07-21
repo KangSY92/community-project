@@ -1,160 +1,165 @@
 <!DOCTYPE html>
 <html lang="ko">
 
-<head th:insert="~{fragments/common/head :: head}">
+<head th:insert="~{fragments/common/head :: head}"></head>
 
 <body>
 
 	<header th:insert="~{fragments/common/header :: header}"></header>
 
-  <main>
-	
-	<script th:if="${boardEditMsg != null}" th:inline="javascript">
-	    alert([[${boardEditMsg}]]);
-	  </script>
-	
-    <section class="post-view">
-      <div class="container">
-        <div class="post">
-          <div class="post-header">
-            <h2 th:text="${board.title}"></h2>
-            <div class="post-meta">
-              <span class="author" th:text="'작성자 : ' + ${board.author}"></span>
-			  <span class="date" th:text="'작성일 : ' + ${board.createDate}"></span>
-			  <span th:if="${board.updateDate != null}" th:text="'수정일 : ' + ${board.updateDate}"></span>
-              <span class="views" th:text="'조회수 : ' + ${board.viewCount}"></span>
-            </div>
-          </div>
-          
-          <div class="post-content">
-			
-            <p th:text="${board.content}"></p>
-			
-            <div class="post-images">
-            
-            </div>
+	<main>
 
-          </div>
-          
-          <div class="post-files">
-            <h4>첨부파일</h4>
-            <ul>
-              <li><a href="#">추천장소_지도.pdf</a> (1.2MB)</li>
-              <li><a href="#">주말여행코스.jpg</a> (0.8MB)</li>
-            </ul>
-          </div>
-          
-          <div class="post-actions">
-			<form th:action="@{/board/edit/form}" method="get">
-            <button type="submit" class="btn">수정</button>
-			<input type="hidden" name="boardId" th:value="${board.boardId}">
-            <button type="button" class="btn btn-danger" id="deletePostBtn">삭제</button>
-            <a th:href="@{/board/list}" class="btn">목록</a>
+		<script th:if="${boardEditMsg != null}" th:inline="javascript">
+			alert([[${boardEditMsg}]]);
+		</script>
+
+		<section class="post-view">
+			<div class="container">
+				<div class="post">
+					<div class="post-header">
+						<h2 th:text="${board.title}"></h2>
+						<div class="post-meta">
+							<span class="author" th:text="'작성자 : ' + ${board.author}"></span>
+							<span class="date" th:text="'작성일 : ' + ${board.createDate}"></span>
+							<span th:if="${board.updateDate != null}" th:text="'수정일 : ' + ${board.updateDate}"></span>
+							<span class="views" th:text="'조회수 : ' + ${board.viewCount}"></span>
+						</div>
+					</div>
+
+					<div class="post-content">
+
+						<p th:text="${board.content}"></p>
+
+						<div class="post-images">
+
+						</div>
+
+					</div>
+
+					<div class="post-files">
+						<h4>첨부파일</h4>
+						<ul>
+							<li><a href="#">추천장소_지도.pdf</a> (1.2MB)</li>
+							<li><a href="#">주말여행코스.jpg</a> (0.8MB)</li>
+						</ul>
+					</div>
+
+					<div class="post-actions">
+						<form th:action="@{/board/edit/form}" method="get">
+							<button type="submit" class="btn">수정</button>
+							<input type="hidden" name="boardId" th:value="${board.boardId}">
+							<button type="button" class="btn btn-danger" id="deletePostBtn">삭제</button>
+							<a th:href="@{/board/list}" class="btn">목록</a>
+						</form>
+					</div>
+				</div>
+
+				<div class="comments">
+					<form th:action="@{/comment/create}" method="post" th:object="${commentDTO}">
+						<input type="hidden" name="boardId" th:value="${board.boardId}">
+						<h3>댓글 (5)</h3>
+						<div class="comment-form">
+							<textarea placeholder="댓글을 입력하세요" th:field="*{content}"></textarea>
+							<button type="submit" class="btn btn-primary">댓글 작성</button>
+						</div>
+					</form>
+				</div>
+
+				<div class="comment-list">
+					<div class="comment">
+						<div class="comment-meta">
+							<span class="comment-author">hiker123</span>
+							<span class="comment-date">2025-06-06 14:23</span>
+						</div>
+						<div class="comment-content">
+							북한산 둘레길 강추합니다! 특히 3코스가 경치가 좋더라고요.
+						</div>
+					</div>
+
+					<div class="comment">
+						<div class="comment-meta">
+							<span class="comment-author">foodie</span>
+							<span class="comment-date">2025-06-06 15:45</span>
+						</div>
+						<div class="comment-content">
+							을왕리 가시면 조개구이 꼭 드셔보세요! 정말 맛있어요.
+						</div>
+					</div>
+
+					<div class="comment">
+						<div class="comment-meta">
+							<span class="comment-author">traveler</span>
+							<span class="comment-date">2025-06-06 16:10</span>
+							<span class="author-badge">작성자</span>
+						</div>
+						<div class="comment-content">
+							@foodie 감사합니다! 조개구이 맛집 추천 부탁드려요~
+						</div>
+					</div>
+
+					<div class="comment">
+						<div class="comment-meta">
+							<span class="comment-author">photo_lover</span>
+							<span class="comment-date">2025-06-07 09:22</span>
+						</div>
+						<div class="comment-content">
+							사진 너무 예쁘네요! 카메라 기종이 어떻게 되나요?
+						</div>
+					</div>
+
+					<div class="comment">
+						<div class="comment-meta">
+							<span class="comment-author">traveler</span>
+							<span class="comment-date">2025-06-07 10:15</span>
+							<span class="author-badge">작성자</span>
+						</div>
+						<div class="comment-content">
+							@photo_lover 소니 A7III로 찍었습니다. 감사합니다!
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</section>
+	</main>
+
+	<footer th:insert="~{fragments/common/footer :: footer}"></footer>
+
+	<!-- 로그인 모달 -->
+	<div id="loginModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>로그인</h2>
+			<form th:action="@{/member/login}" method="post" id="loginForm">
+				<div class="form-group">
+					<label for="username">아이디</label>
+					<input type="text" id="id" name="id" required>
+				</div>
+				<div class="form-group">
+					<label for="password">비밀번호</label>
+					<input type="password" id="password" name="password" required>
+				</div>
+				<button type="submit" class="btn btn-primary">로그인</button>
 			</form>
-          </div>
-        </div>
+			<p class="text-center">계정이 없으신가요? <a href="register.html">회원가입</a></p>
+		</div>
+	</div>
 
-        <div class="comments">
-          <h3>댓글 (5)</h3>
-          <div class="comment-form">
-            <textarea placeholder="댓글을 입력하세요"></textarea>
-            <button class="btn btn-primary">댓글 작성</button>
-          </div>
-          
-          <div class="comment-list">
-            <div class="comment">
-              <div class="comment-meta">
-                <span class="comment-author">hiker123</span>
-                <span class="comment-date">2025-06-06 14:23</span>
-              </div>
-              <div class="comment-content">
-                북한산 둘레길 강추합니다! 특히 3코스가 경치가 좋더라고요.
-              </div>
-            </div>
-            
-            <div class="comment">
-              <div class="comment-meta">
-                <span class="comment-author">foodie</span>
-                <span class="comment-date">2025-06-06 15:45</span>
-              </div>
-              <div class="comment-content">
-                을왕리 가시면 조개구이 꼭 드셔보세요! 정말 맛있어요.
-              </div>
-            </div>
-            
-            <div class="comment">
-              <div class="comment-meta">
-                <span class="comment-author">traveler</span>
-                <span class="comment-date">2025-06-06 16:10</span>
-                <span class="author-badge">작성자</span>
-              </div>
-              <div class="comment-content">
-                @foodie 감사합니다! 조개구이 맛집 추천 부탁드려요~
-              </div>
-            </div>
-            
-            <div class="comment">
-              <div class="comment-meta">
-                <span class="comment-author">photo_lover</span>
-                <span class="comment-date">2025-06-07 09:22</span>
-              </div>
-              <div class="comment-content">
-                사진 너무 예쁘네요! 카메라 기종이 어떻게 되나요?
-              </div>
-            </div>
-            
-            <div class="comment">
-              <div class="comment-meta">
-                <span class="comment-author">traveler</span>
-                <span class="comment-date">2025-06-07 10:15</span>
-                <span class="author-badge">작성자</span>
-              </div>
-              <div class="comment-content">
-                @photo_lover 소니 A7III로 찍었습니다. 감사합니다!
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-   <footer th:insert="~{fragments/common/footer :: footer}"></footer>
-
-  <!-- 로그인 모달 -->
-  <div  id="loginModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>로그인</h2>
-        <form th:action="@{/member/login}" method="post" id="loginForm">
-          <div class="form-group">
-            <label for="username">아이디</label>
-            <input type="text" id="id" name="id" required>
-          </div>
-          <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" required>
-          </div>
-          <button type="submit" class="btn btn-primary">로그인</button>
-        </form>
-        <p class="text-center">계정이 없으신가요? <a href="register.html">회원가입</a></p>
-      </div>
-    </div>
-  
-  <!-- 삭제 확인 모달 -->
-  <div id="deleteModal" class="modal">
-    <div class="modal-content">
-      <h2>게시글 삭제</h2>
-      <p>정말 이 게시글을 삭제하시겠습니까?</p>
-	  <form th:action="@{/board/delete}" method="post">
-      <div class="modal-actions">
-		<input type="hidden" name="boardId" th:value="${board.boardId}">
-		<input type="hidden" name="author" th:value="${board.author}">
-        <button type="submit" class="btn btn-danger" id="confirmDelete">삭제</button>
-        <button type="button" class="btn" id="cancelDelete">취소</button>
-      </div>
-	  </form>
-    </div>
-  </div>
+	<!-- 삭제 확인 모달 -->
+	<div id="deleteModal" class="modal">
+		<div class="modal-content">
+			<h2>게시글 삭제</h2>
+			<p>정말 이 게시글을 삭제하시겠습니까?</p>
+			<form th:action="@{/board/delete}" method="post">
+				<div class="modal-actions">
+					<input type="hidden" name="boardId" th:value="${board.boardId}">
+					<input type="hidden" name="author" th:value="${board.author}">
+					<button type="submit" class="btn btn-danger" id="confirmDelete">삭제</button>
+					<button type="button" class="btn" id="cancelDelete">취소</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </body>
+
 </html>

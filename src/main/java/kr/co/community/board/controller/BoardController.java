@@ -17,6 +17,7 @@ import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.service.impl.BoardServiceImpl;
 import kr.co.community.board.util.Pagenation;
+import kr.co.community.comment.dto.CommentDTO;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -98,6 +99,7 @@ public class BoardController {
 		boardService.viewCountplus(boardId);
 		BoardDTO result = boardService.detail(boardId);
 		model.addAttribute("board", result);
+		model.addAttribute("commentDTO", new CommentDTO());
 		return "board/view-post";
 	}
 
