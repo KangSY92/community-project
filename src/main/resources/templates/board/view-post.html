@@ -12,6 +12,10 @@
 		<script th:if="${boardEditMsg != null}" th:inline="javascript">
 			alert([[${boardEditMsg}]]);
 		</script>
+		
+		<script th:if="${commentMsg != null}" th:inline="javascript">
+			alert([[${commentMsg}]]);
+		</script>
 
 		<section class="post-view">
 			<div class="container">
@@ -57,68 +61,23 @@
 				<div class="comments">
 					<form th:action="@{/comment/create}" method="post" th:object="${commentDTO}">
 						<input type="hidden" name="boardId" th:value="${board.boardId}">
-						<h3>댓글 (5)</h3>
+						<h3 th:text="'댓글 (' + ${commentDTO.commentCount} + ')'"></h3>
 						<div class="comment-form">
-							<textarea placeholder="댓글을 입력하세요" th:field="*{content}"></textarea>
-							<button type="submit" class="btn btn-primary">댓글 작성</button>
+							<textarea id="commentContent" placeholder="댓글을 입력하세요" th:field="*{content}"></textarea>
+							<button type="submit" id="commentBtn" class="btn btn-primary" onclick="buttonbtn()">댓글 작성</button>
 						</div>
 					</form>
 				</div>
 
 				<div class="comment-list">
-					<div class="comment">
+					<div th:each="comment, iterStat : ${comment}" class="comment">
 						<div class="comment-meta">
-							<span class="comment-author">hiker123</span>
-							<span class="comment-date">2025-06-06 14:23</span>
+							<span th:text="${comment.author}" class="comment-author"></span>
+							<span th:text="${comment.createDate}" class="comment-date"></span>
 						</div>
-						<div class="comment-content">
-							북한산 둘레길 강추합니다! 특히 3코스가 경치가 좋더라고요.
-						</div>
-					</div>
-
-					<div class="comment">
-						<div class="comment-meta">
-							<span class="comment-author">foodie</span>
-							<span class="comment-date">2025-06-06 15:45</span>
-						</div>
-						<div class="comment-content">
-							을왕리 가시면 조개구이 꼭 드셔보세요! 정말 맛있어요.
-						</div>
-					</div>
-
-					<div class="comment">
-						<div class="comment-meta">
-							<span class="comment-author">traveler</span>
-							<span class="comment-date">2025-06-06 16:10</span>
-							<span class="author-badge">작성자</span>
-						</div>
-						<div class="comment-content">
-							@foodie 감사합니다! 조개구이 맛집 추천 부탁드려요~
-						</div>
-					</div>
-
-					<div class="comment">
-						<div class="comment-meta">
-							<span class="comment-author">photo_lover</span>
-							<span class="comment-date">2025-06-07 09:22</span>
-						</div>
-						<div class="comment-content">
-							사진 너무 예쁘네요! 카메라 기종이 어떻게 되나요?
-						</div>
-					</div>
-
-					<div class="comment">
-						<div class="comment-meta">
-							<span class="comment-author">traveler</span>
-							<span class="comment-date">2025-06-07 10:15</span>
-							<span class="author-badge">작성자</span>
-						</div>
-						<div class="comment-content">
-							@photo_lover 소니 A7III로 찍었습니다. 감사합니다!
-						</div>
+						<div th:text="${comment.content}" class="comment-content"></div>
 					</div>
 				</div>
-			</div>
 			</div>
 		</section>
 	</main>

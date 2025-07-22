@@ -13,4 +13,15 @@ INSERT INTO BOARD_COMMENT VALUES(comment_seq.nextval,
 								 null)
 </insert>
 
+<select id="getList">
+SELECT comment_id, board_id, author, CONTENT, CREATE_DATE, UPDATE_DATE,
+	   row_number() over(ORDER BY create_date)
+FROM board_comment
+WHERE board_id = #{boardId}
+</select>
+
+<select id="commentCount">
+SELECT COUNT(*) FROM BOARD_COMMENT WHERE board_id = #{boardId}
+</select>
+
 </mapper>

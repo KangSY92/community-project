@@ -18,6 +18,7 @@ import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.service.impl.BoardServiceImpl;
 import kr.co.community.board.util.Pagenation;
 import kr.co.community.comment.dto.CommentDTO;
+import kr.co.community.comment.service.impl.CommentServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -29,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 
 	private final BoardServiceImpl boardService;
+	
+	private final CommentServiceImpl commentService;
 
 	private final Pagenation pagenation;
 
@@ -91,15 +94,23 @@ public class BoardController {
 	 * 게시글 상세 페이지로 이동합니다.
 	 * 
 	 * @param boardId 조회할 게시글 ID
+	 * @param commentDTO 댓글 정보를 담는 DTO객체로, 댓글 개수 정보를 설정합니다.
 	 * @param model   뷰에 전달할 모델 객체
 	 * @return 게시글 상세 화면의 뷰 이름(board/view-post)
 	 */
 	@GetMapping("/detail")
-	public String detail(@RequestParam(name = "boardId") int boardId, Model model) {
+	public String detail(@RequestParam(name = "boardId") int boardId, CommentDTO commentDTO, Model model) {
 		boardService.viewCountplus(boardId);
 		BoardDTO result = boardService.detail(boardId);
 		model.addAttribute("board", result);
 		model.addAttribute("commentDTO", new CommentDTO());
+		
+		List<CommentDTO> comment = commentService.getList(boardId);
+		model.addAttribute("comment", comment);
+		
+		int commentCount = commentService.commentCount(boardId);
+		commentDTO.setCommentCount(commentCount);
+		model.addAttribute(commentDTO);
 		return "board/view-post";
 	}
 

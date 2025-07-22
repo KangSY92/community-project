@@ -19,5 +19,6 @@ public class CommentDTO {
 	private String createDate;
 	private String updateDate;
 	
+	private int commentCount;
 
 }
