@@ -78,6 +78,26 @@
 						<div th:text="${comment.content}" class="comment-content"></div>
 					</div>
 				</div>
+				<div class="pagination">
+					<!--왼쪽 버튼-->
+					<a href="#" class="page-link" th:if="${pi.currentPage <= 1}" aria-label="Previous"
+						aria-hidden="true">&laquo;</a>
+					<a class="page-link" th:if="${pi.currentPage > 1}"
+						th:href="@{/board/detail(boardId=${board.boardId}, currentPage=${pi.currentPage-1})}" aria-label="Previous"
+						aria-hidden="true">&laquo;</a>
+
+					<!--페이지-->
+					<a class="page-link" th:each="page : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+						th:href="@{/board/detail(boardId=${board.boardId}, currentPage=${page})}" th:text="${page}"></a>
+
+					<!--오른쪽 버튼-->
+					<a class="page-link" th:if="${pi.currentPage >= pi.maxPage}" href="#" aria-label="Next"
+						aria-hidden="true">&raquo;</a>
+					<a class="page-link" th:if="${pi.currentPage < pi.maxPage}"
+						th:href="@{/board/detail(boardId=${board.boardId}, currentPage=${pi.currentPage+1})}" aria-label="Next"
+						aria-hidden="true">&raquo;</a>
+
+				</div>
 			</div>
 		</section>
 	</main>

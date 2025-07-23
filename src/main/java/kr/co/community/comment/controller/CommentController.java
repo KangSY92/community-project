@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.community.comment.dto.CommentDTO;
-import kr.co.community.comment.service.impl.CommentServiceImpl;
+import kr.co.community.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentController {
 	
-	private final CommentServiceImpl commentService;
+	private final CommentService commentService;
 
 	/**
 	 * 댓글을 등록하고, 해당 게시글 상세 페이지로 리다이렉트 합니다.
@@ -43,8 +43,9 @@ public class CommentController {
 			return "redirect:/board/detail?boardId=" + boardId;
 		} 
 		
-		commentDTO.setAuthor(sessionID);
 		commentDTO.setId(sessionID);
+		commentDTO.setAuthor(sessionID);
+		
 		commentService.create(boardId, commentDTO);
 		
 			return "redirect:/board/detail?boardId=" + boardId;

@@ -7,7 +7,7 @@ import kr.co.community.board.dto.PageDTO;
 
 public interface BoardService {
 
-	void create(BoardDTO boardDTO, String sessionID);
+	void create(BoardDTO boardDTO);
 	
 	List<BoardDTO> getList(PageDTO pi);
 	

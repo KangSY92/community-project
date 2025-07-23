@@ -28,7 +28,7 @@ public class BoardServiceImpl implements BoardService {
 	 * @param sessionID 현재 로그인한 사용자 세션 ID
 	 */
 	@Override
-	public void create(BoardDTO boardDTO, String sessionID) {
+	public void create(BoardDTO boardDTO) {
 		boardMapper.create(boardDTO);
 	}
 
@@ -83,9 +83,7 @@ public class BoardServiceImpl implements BoardService {
 	 */
 	@Override
 	public void delete(int boardId, String author, String sessionid) {
-		if (author.equals(sessionid)) {
 			boardMapper.delete(boardId);
-		}
 
 	}
 

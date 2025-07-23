@@ -2,7 +2,6 @@ package kr.co.community.board.controller;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +14,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpSession;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.PageDTO;
-import kr.co.community.board.service.impl.BoardServiceImpl;
+import kr.co.community.board.service.BoardService;
 import kr.co.community.board.util.Pagenation;
 import kr.co.community.comment.dto.CommentDTO;
-import kr.co.community.comment.service.impl.CommentServiceImpl;
+import kr.co.community.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -29,11 +28,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardController {
 
-	private final BoardServiceImpl boardService;
+	private final BoardService boardService;
 	
-	private final CommentServiceImpl commentService;
-
-	private final Pagenation pagenation;
+	private final CommentService commentService;
 
 	/**
 	 * 게시글 목록 페이지로 이동합니다.
@@ -48,6 +45,8 @@ public class BoardController {
 		int pageLimit = 5; // (버튼에) 보여질 페이지 수
 		int boardLimit = 5; // 한 페이지에 들어갈 게시글 수
 
+		Pagenation pagenation = new Pagenation();
+		
 		PageDTO pi = pagenation.getpageDTO(totalCount, currentPage, pageLimit, boardLimit);
 
 		List<BoardDTO> boards = boardService.getList(pi);
@@ -63,10 +62,9 @@ public class BoardController {
 	 * @return 게시글 작성 폼 화면의 뷰 이름(board/write-post)
 	 */
 	@GetMapping("/create/form")
-	public String createForm(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String createForm(Model model, @SessionAttribute(value="id", required=false) String sessionId, RedirectAttributes redirectAttributes) {
 
-		Object status = session.getAttribute("id");
-		if (status != null) {
+		if (sessionId != null) {
 			model.addAttribute("boardDTO", new BoardDTO());
 			return "board/write-post";
 		} else {
@@ -86,7 +84,7 @@ public class BoardController {
 	public String create(BoardDTO boardDTO, @SessionAttribute("id") String sessionID) {
 		boardDTO.setAuthor(sessionID);
 
-		boardService.create(boardDTO, sessionID);
+		boardService.create(boardDTO);
 		return "redirect:/board/list";
 	}
 
@@ -99,18 +97,28 @@ public class BoardController {
 	 * @return 게시글 상세 화면의 뷰 이름(board/view-post)
 	 */
 	@GetMapping("/detail")
-	public String detail(@RequestParam(name = "boardId") int boardId, CommentDTO commentDTO, Model model) {
+	public String detail(@RequestParam(name = "boardId") int boardId,
+						 @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
+						 CommentDTO commentDTO, Model model) {
 		boardService.viewCountplus(boardId);
 		BoardDTO result = boardService.detail(boardId);
 		model.addAttribute("board", result);
-		model.addAttribute("commentDTO", new CommentDTO());
+		model.addAttribute(commentDTO);
 		
-		List<CommentDTO> comment = commentService.getList(boardId);
+		int totalCount = commentService.commentCount(boardId);
+		int pageLimit = 5;
+		int boardLimit = 5; 
+		
+		Pagenation pagenation = new Pagenation();
+		
+		PageDTO pi = pagenation.getpageDTO(totalCount, currentPage, pageLimit, boardLimit);
+		
+		model.addAttribute("pi", pi);
+		List<CommentDTO> comment = commentService.getList(boardId, pi);
 		model.addAttribute("comment", comment);
 		
 		int commentCount = commentService.commentCount(boardId);
 		commentDTO.setCommentCount(commentCount);
-		model.addAttribute(commentDTO);
 		return "board/view-post";
 	}
 
@@ -127,16 +135,14 @@ public class BoardController {
 	 */
 	@PostMapping("/delete")
 	public String delete(@RequestParam(name = "boardId") int boardId, @RequestParam(name = "author") String author,
-			HttpSession sessionID, RedirectAttributes redirectAttributes) {
-		String sessionid = (String) sessionID.getAttribute("id");
+			@SessionAttribute(value="id", required=false) String sessionId, RedirectAttributes redirectAttributes) {
 		
-		boardService.delete(boardId, author, sessionid);
 
-		
-		if (sessionid == null) {
+		if (sessionId == null) {
 			redirectAttributes.addFlashAttribute("boardDeleteMsg", "로그인이 필요합니다.");
 			return "redirect:/board/list";
-		}else if (sessionid.equals(author)) {
+		}else if (sessionId.equals(author)) {
+			boardService.delete(boardId, author, sessionId);
 			redirectAttributes.addFlashAttribute("boardDeleteMsg", "삭제되었습니다.");
 			return "redirect:/board/list";
 		} else {
@@ -158,19 +164,19 @@ public class BoardController {
 	 * @return 수정 폼 페이지 또는 권한이 없을 시 상세 페이지로 리다이렉트
 	 */
 	@GetMapping("/edit/form")
-	public String editForm(@RequestParam(name = "boardId") int boardId, HttpSession sessionID,
+	public String editForm(@RequestParam(name = "boardId") int boardId, @SessionAttribute(value="id", required=false) String sessionId,
 			RedirectAttributes redirectAttributes, Model model) {
-
-		BoardDTO result = boardService.detail(boardId);
-		model.addAttribute("board", result);
-		String author = result.getAuthor();
-		String sessionid = (String) sessionID.getAttribute("id");
 		
-		if(sessionid == null) {
+		if(sessionId == null) {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "로그인이 필요합니다.");
 			return "redirect:/board/detail?boardId=" + boardId;
-		}else if (author.equals(sessionid)) {
-
+		}
+		
+		BoardDTO result = boardService.detail(boardId);
+		String author = result.getAuthor();
+		
+		if (author.equals(sessionId)) {
+			model.addAttribute("board", result);
 			return "board/edit-post";
 		} else {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "다른 사용자 게시글은 수정 할 수 없습니다.");
@@ -189,9 +195,27 @@ public class BoardController {
 	 */
 	@PostMapping("/edit")
 	public String edit(@RequestParam(name = "boardId") int boardId, BoardDTO boardDTO,
-			RedirectAttributes redirectAttributes) {
-		boardService.edit(boardDTO, boardId);
+					   @SessionAttribute(value="id", required=false) String sessionId,
+					   RedirectAttributes redirectAttributes) {
+		
+		if(sessionId == null) {
+			redirectAttributes.addFlashAttribute("boardEditMsg", "로그인이 필요합니다.");
+			return "redirect:/board/detail?boardId=" + boardId;
+		}
+		
+		BoardDTO result = boardService.detail(boardId);
+		String author = result.getAuthor();
+		
+		if (author.equals(sessionId)) {
+			boardService.edit(boardDTO, boardId);
+			return "redirect:/board/detail?boardId=" + boardId;
+			
+		} else {
+			redirectAttributes.addFlashAttribute("boardEditMsg", "다른 사용자 게시글은 수정 할 수 없습니다.");
+			return "redirect:/board/detail?boardId=" + boardId;
+		}
+		
 
-		return "redirect:/board/detail?boardId=" + boardId;
+		
 	}
 }

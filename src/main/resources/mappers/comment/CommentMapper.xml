@@ -14,10 +14,11 @@ INSERT INTO BOARD_COMMENT VALUES(comment_seq.nextval,
 </insert>
 
 <select id="getList">
-SELECT comment_id, board_id, author, CONTENT, CREATE_DATE, UPDATE_DATE,
-	   row_number() over(ORDER BY create_date)
-FROM board_comment
-WHERE board_id = #{boardId}
+SELECT * FROM (
+	SELECT comment_id, board_id, author, CONTENT, CREATE_DATE, UPDATE_DATE,
+			row_number() over(ORDER BY create_date) AS rn
+	FROM board_comment bc WHERE board_id = #{boardId})
+WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
 </select>
 
 <select id="commentCount">

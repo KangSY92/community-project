@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.community.board.dto.PageDTO;
 import kr.co.community.comment.dto.CommentDTO;
 import kr.co.community.comment.mapper.CommentMapper;
 import kr.co.community.comment.service.CommentService;
@@ -26,6 +27,7 @@ public class CommentServiceImpl implements CommentService {
 	 */
 	@Override
 	public void create(int boardId, CommentDTO commentDTO) {
+		
 		commentMapper.create(boardId, commentDTO);
 	}
 
@@ -33,11 +35,12 @@ public class CommentServiceImpl implements CommentService {
 	 * 특정 게시글에 달린 댓글 목록을 조회합니다.
 	 * 
 	 * @param boardId 조회할 게시글의 ID
+	 * @param pi 
 	 * @return 해당 게시글에 달린 댓글 리스트
 	 */
 	@Override
-	public List<CommentDTO> getList(int boardId) {
-		return commentMapper.getList(boardId);
+	public List<CommentDTO> getList(int boardId, PageDTO pi) {
+		return commentMapper.getList(boardId, pi);
 	}
 
 	/**
