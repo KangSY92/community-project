@@ -13,6 +13,10 @@
 	</script>
   </div>
   
+  <script th:if="${boardCreateMsg != null}" th:inline="javascript">
+      alert([[${boardCreateMsg}]]);
+	  </script>
+	  
   <script th:if="${registMsg != null}" th:inline="javascript">
   	alert([[${registMsg}]]);
   </script>

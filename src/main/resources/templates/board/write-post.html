@@ -1,51 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>글쓰기 - 커뮤니티 홈페이지</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
-</head>
+	
+<head th:insert="~{fragments/common/head :: head}">
+
+    <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/script.js" defer></script>
+  <script src="/js/registScript.js" defer></script>
 <body>
-  <header>
-    <div class="container">
-      <h1 class="logo">
-        <a href="index.html">커뮤니티</a>
-      </h1>
-      <nav>
-        <ul class="menu">
-          <li><a href="index.html">홈</a></li>
-          <li><a href="board.html" class="active">게시판</a></li>
-          <li><a href="upload.html">업로드</a></li>
-          <li><a href="#" id="loginBtn">로그인</a></li>
-          <li><a href="register.html">회원가입</a></li>
-          <li>
-            <div class="profile-upload">
-              <div class="profile-preview header-profile" id="profilePreview">
-                <img src="https://api.a0.dev/assets/image?text=기본%20프로필&amp;aspect=1:1" alt="기본 프로필">
-              </div>
-            </div>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+	
+	<header th:insert="~{fragments/common/header :: header}"></header>
 
   <main>
     <section class="write-post">
       <div class="container">
         <h2>게시글 작성</h2>
         
-        <form id="postForm" class="post-form">
+        <form th:action="@{/board/create}" method="post" th:object="${boardDTO}" id="postForm" class="post-form">
           <div class="form-group">
             <label for="postTitle">제목</label>
-            <input type="text" id="postTitle" name="title" required>
+            <input type="text" id="postTitle" name="title" th:field="*{title}" required>
           </div>
           
           <div class="form-group">
             <label for="postContent">내용</label>
-            <textarea id="postContent" name="content" rows="12" required></textarea>
+            <textarea id="postContent" name="content" rows="12" th:field="*{content}" required></textarea>
           </div>
           
           <div class="form-group">
@@ -63,34 +41,25 @@
           </div>
           
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary">작성 완료</button>
-            <a href="board.html" class="btn">취소</a>
+            <button type="submit" class="btn btn-primary" onclick="boardCreate()">작성 완료</button>
+            <a href="/board/list" class="btn">취소</a>
           </div>
         </form>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 커뮤니티 홈페이지. All rights reserved.</p>
-      <div class="footer-links">
-        <a href="#">이용약관</a>
-        <a href="#">개인정보처리방침</a>
-        <a href="#">고객센터</a>
-      </div>
-    </div>
-  </footer>
+  <footer th:insert="~{fragments/common/footer :: footer}"></footer>
 
   <!-- 로그인 모달 -->
-  <div id="loginModal" class="modal">
+  <div  id="loginModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>로그인</h2>
-      <form id="loginForm">
+      <form th:action="@{/member/login}" method="post" id="loginForm">
         <div class="form-group">
           <label for="username">아이디</label>
-          <input type="text" id="username" name="username" required>
+          <input type="text" id="id" name="id" required>
         </div>
         <div class="form-group">
           <label for="password">비밀번호</label>
