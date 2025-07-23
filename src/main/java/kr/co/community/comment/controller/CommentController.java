@@ -52,4 +52,24 @@ public class CommentController {
 		
 	}
 	
+	@PostMapping("/delete")
+	public String delete(@RequestParam(name = "commentId") int commentId,
+						 @SessionAttribute(value = "id", required = false) String sessionId,
+						 @RequestParam(name = "author") String author,
+						 RedirectAttributes redirectAttributes) {
+		System.out.println(commentId);
+		System.out.println(sessionId);
+		System.out.println(author);
+		if(sessionId == null) {
+			redirectAttributes.addFlashAttribute("commentDeleteMsg", "로그인이 필요합니다.");
+		} else if(sessionId.equals(author)) {
+			redirectAttributes.addFlashAttribute("commentDeleteMsg", "삭제되었습니다.");
+		} else {
+			redirectAttributes.addFlashAttribute("commentDeleteMsg", "다른 사용자의 댓글은 삭제할 수 없습니다.");
+			
+		}
+		
+		return "redirect:/";
+	}
+	
 }

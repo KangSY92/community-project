@@ -13,9 +13,19 @@ INSERT INTO BOARD_COMMENT VALUES(comment_seq.nextval,
 								 null)
 </insert>
 
-<select id="getList">
+<resultMap id="CommentResultMap" type="kr.co.community.comment.dto.CommentDTO">
+	<result column="COMMENT_ID" property="commentId" />
+	<result column="BOARD_ID" property="boardId" />
+	<result column="ID" property="id" />
+	<result column="AUTHOR" property="author" />
+	<result column="CONTENT" property="content" />
+	<result column="CREATE_DATE" property="createDate" />
+	<result column="UPDATE_DATE" property="updateDate" />
+</resultMap>
+
+<select id="getList" resultMap="CommentResultMap">
 SELECT * FROM (
-	SELECT comment_id, board_id, author, CONTENT, CREATE_DATE, UPDATE_DATE,
+	SELECT comment_id, board_id, id, author, CONTENT, CREATE_DATE, UPDATE_DATE,
 			row_number() over(ORDER BY create_date) AS rn
 	FROM board_comment bc WHERE board_id = #{boardId})
 WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
