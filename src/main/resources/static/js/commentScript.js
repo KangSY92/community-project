@@ -11,12 +11,51 @@ function buttonbtn() {
 }
 
 function commentdel() {
-	document.getElementsByClassName
-  const commentDel = document.getElementsByClassName('commentDelete')
-  if(confirm("삭제하시겠습니까")) {
-    alert("삭제되었습니다")
-    commentDel.type = 'submit'
-  } else {
-    alert("취소되었습니다")
-  }
+	const commentDel = document.getElementsByClassName('commentDelete');
+	if (confirm("삭제하시겠습니까")) {
+		alert("삭제되었습니다")
+		return true;
+	} else {
+		alert("취소되었습니다")
+		commentDel.type = 'button'
+		return false;
+	}
+}
+
+function commentedit(button) {
+	const commentDiv = button.closest('.comment')
+	const commentcontent = commentDiv.querySelector('.comment-content')
+	const commentedit = commentDiv.querySelector('.comment-Edit')
+	commentcontent.style.display = 'none';
+	commentedit.style.display = 'block';
+}
+
+function commentEdetCancel(button) {
+	const commentDiv = button.closest('.comment')
+	const commentcontent = commentDiv.querySelector('.comment-content')
+	const commentedit = commentDiv.querySelector('.comment-Edit')
+	commentcontent.style.display = 'block';
+	commentedit.style.display = 'none';
+}
+
+function commentEditUpdate(button) {
+
+	const commenteditbtn = document.getElementById('commentEditUpdate');
+	const edittextarea = document.getElementById('editTextarea');
+	if (edittextarea.value.trim() === "") {
+		commenteditbtn.type = 'button';
+		alert('댓글을 입력해 주세요');
+		return false;
+	} else {
+		commentbtn.type = 'submit';
+		const commentDiv = button.closest('.comment')
+		const commentcontent = commentDiv.querySelector('.comment-content')
+		const commentedit = commentDiv.querySelector('.comment-Edit')
+		commentcontent.style.display = 'block';
+		commentedit.style.display = 'none';
+
+		alert('수정되었습니다.');
+		return true;
+	}
+
 }

@@ -35,4 +35,14 @@ WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
 SELECT COUNT(*) FROM BOARD_COMMENT WHERE board_id = #{boardId}
 </select>
 
+<delete id="delete">
+DELETE FROM BOARD_COMMENT WHERE COMMENT_ID = #{commentId}
+</delete>
+
+<update id="commentEdit">
+UPDATE BOARD_COMMENT
+SET CONTENT = #{comment.content}
+WHERE COMMENT_ID = #{commentId}
+</update>
+
 </mapper>
