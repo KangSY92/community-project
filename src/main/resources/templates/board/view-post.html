@@ -89,12 +89,16 @@
 						<div th:text="${comment.content}" class="comment-content" name="commentDivEdit"></div>
 						<div class="comment-Edit" style="display: none;" name="commentTextEdit">
 							<form th:action="@{/comment/edit}" method="post" th:object="${commentDTO}">
-							<input type="hidden" th:name="boardId" th:value="${comment.boardId}" />
-							<input type="hidden" th:name="author" th:value="${comment.author}" />
-							<input type="hidden" th:name="commentId" th:value="${comment.commentId}" />
-						  <textarea th:text="${comment.content}" id="editTextarea" name="content"></textarea>
-						  <button id="commentEditCancel" type="button" onclick="commentEdetCancel(this)">취소</button>
-						  <button id="commentEditUpdate" type="submit" onclick="return commentEditUpdate(this)">수정</button>
+								<input type="hidden" th:name="boardId" th:value="${comment.boardId}" />
+								<input type="hidden" th:name="author" th:value="${comment.author}" />
+								<input type="hidden" th:name="commentId" th:value="${comment.commentId}" />
+								<textarea th:text="${comment.content}" class="editTextarea" name="content"></textarea>
+								<div style="margin-left: 94%;">
+								<button class="commentEditUpdate" type="button"
+									onclick="commentEditUpdate(this)">수정</button>
+								<button class="commentEditCancel" type="button"
+									onclick="commentEdetCancel(this)">취소</button>
+									</div>
 							</form>
 						</div>
 					</div>

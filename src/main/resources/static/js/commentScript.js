@@ -40,22 +40,19 @@ function commentEdetCancel(button) {
 
 function commentEditUpdate(button) {
 
-	const commenteditbtn = document.getElementById('commentEditUpdate');
-	const edittextarea = document.getElementById('editTextarea');
+	const commentDiv = button.closest('.comment')
+	const edittextarea = commentDiv.querySelector('.editTextarea');
+
 	if (edittextarea.value.trim() === "") {
-		commenteditbtn.type = 'button';
 		alert('댓글을 입력해 주세요');
-		return false;
 	} else {
-		commentbtn.type = 'submit';
-		const commentDiv = button.closest('.comment')
+		button.type = 'submit';
 		const commentcontent = commentDiv.querySelector('.comment-content')
 		const commentedit = commentDiv.querySelector('.comment-Edit')
 		commentcontent.style.display = 'block';
 		commentedit.style.display = 'none';
 
 		alert('수정되었습니다.');
-		return true;
 	}
 
 }
