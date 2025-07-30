@@ -9,7 +9,7 @@ public interface BoardService {
 
 	void create(BoardDTO boardDTO);
 	
-	List<BoardDTO> getList(PageDTO pi);
+	List<BoardDTO> getList(PageDTO pi, BoardDTO boardDTO);
 	
 	BoardDTO detail(int boardId);
 	

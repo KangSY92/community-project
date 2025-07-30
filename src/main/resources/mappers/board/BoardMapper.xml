@@ -28,11 +28,18 @@
 	<select id="getList" resultMap="boardResultMap">
 	SELECT * FROM ( SELECT
 		board_id, title, author, content, view_count, create_date, update_date, drop_date, ROW_NUMBER() OVER(ORDER BY create_date DESC) AS rn
-		FROM BOARD b WHERE DROP_DATE IS NULL) WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
+		FROM BOARD b WHERE DROP_DATE IS NULL
+		<if test="board.text != null">
+		AND (title LIKE '%' || #{board.text} || '%' or content LIKE '%' || #{board.text} || '%')
+		</if>
+		) WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
 	</select>
 
 	<select id="getTotalCount">
 	SELECT count(*) FROM BOARD WHERE DROP_DATE IS NULL
+	<if test="text != null">
+		AND (title LIKE '%' || #{text} || '%' or content LIKE '%' || #{text} || '%')
+		</if>
 	</select>
 	
 	<select id="detail" resultMap="boardResultMap">

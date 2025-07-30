@@ -281,18 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 });
 
-//댓글 내용 빈값이면 서브밋 막기
-function buttonbtn() {
-	const commentbtn = document.getElementById('commentBtn');
-	const commentcontent = document.getElementById('commentContent');
-	if (commentcontent.value.trim() === "") {
-		commentbtn.type = 'button';
-		alert('댓글을 입력해 주세요');
-	} else {
-		commentbtn.type = 'submit';
-	}
-}
-
 // CSS 클래스 토글 헬퍼 함수
 function toggleClass(element, className) {
 	if (element.classList.contains(className)) {

@@ -13,7 +13,7 @@ public interface BoardMapper {
 
 	void create(BoardDTO boardDTO);
 
-	List<BoardDTO> getList(@Param("pi")PageDTO pi);
+	List<BoardDTO> getList(@Param("pi")PageDTO pi, @Param("board")BoardDTO boardDTO);
 
 	int getTotalCount(BoardDTO boardDTO);
 
