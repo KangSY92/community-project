@@ -12,57 +12,69 @@
 		<result column="update_date" property="updateDate" />
 		<result column="author" property="author" />
 	</resultMap>
-	
+
 	<insert id="create">
-	INSERT INTO BOARD VALUES(board_seq.nextval,
-							 #{title},
-							 #{content},
-							 DEFAULT,
-							 DEFAULT,
-							 null,
-							 null,
-							 #{author}
-							 )
+		INSERT INTO BOARD VALUES(board_seq.nextval,
+		#{title},
+		#{content},
+		DEFAULT,
+		DEFAULT,
+		null,
+		null,
+		#{author}
+		)
 	</insert>
 
-	<select id="getList" resultMap="boardResultMap">
-	SELECT * FROM ( SELECT
-		board_id, title, author, content, view_count, create_date, update_date, drop_date, ROW_NUMBER() OVER(ORDER BY create_date DESC) AS rn
-		FROM BOARD b WHERE DROP_DATE IS NULL
-		<if test="board.text != null">
-		AND (title LIKE '%' || #{board.text} || '%' or content LIKE '%' || #{board.text} || '%')
+	<select id="getList" resultMap="boardResultMap"> SELECT * FROM ( SELECT
+		board_id, title, author, content, view_count, create_date, update_date,
+		drop_date, ROW_NUMBER() OVER(ORDER BY create_date DESC) AS rn FROM BOARD
+		b WHERE DROP_DATE IS NULL <if test="board.text != null">
+			AND (title LIKE '%' || #{board.text} || '%' or content LIKE '%' ||
+		#{board.text} || '%')
 		</if>
-		) WHERE rn BETWEEN #{pi.offset} AND #{pi.limit}
+		) WHERE rn BETWEEN #{pi.offset} AND #{pi.limit} </select>
+
+	<select id="getTotalCount"> SELECT count(*) FROM BOARD WHERE DROP_DATE IS
+		NULL <if test="text != null">
+			AND (title LIKE '%' || #{text} || '%' or content LIKE '%' || #{text}
+		|| '%')
+		</if>
 	</select>
 
-	<select id="getTotalCount">
-	SELECT count(*) FROM BOARD WHERE DROP_DATE IS NULL
-	<if test="text != null">
-		AND (title LIKE '%' || #{text} || '%' or content LIKE '%' || #{text} || '%')
-		</if>
-	</select>
-	
 	<select id="detail" resultMap="boardResultMap">
-	SELECT * FROM BOARD WHERE board_id = #{boardId}
-	AND DROP_DATE IS NULL
+		SELECT * FROM BOARD WHERE board_id = #{boardId}
+		AND DROP_DATE IS NULL
 	</select>
-	
+
 	<update id="viewCount">
-	UPDATE BOARD
-	SET view_count = view_count+1
-	WHERE board_id = #{boardId}
-	AND DROP_DATE IS NULL
+		UPDATE BOARD
+		SET view_count = view_count+1
+		WHERE board_id = #{boardId}
+		AND DROP_DATE IS NULL
 	</update>
-	
+
 	<update id="delete">
-	UPDATE BOARD
-	SET DROP_DATE = SYSDATE
-	WHERE BOARD_ID = #{boardId}
+		UPDATE BOARD
+		SET DROP_DATE = SYSDATE
+		WHERE BOARD_ID = #{boardId}
 	</update>
-	
+
 	<update id="edit">
-	UPDATE BOARD
-	SET TITLE = #{board.title}, CONTENT = #{board.content}, UPDATE_DATE = SYSDATE
-	WHERE BOARD_ID = #{boardId}
+		UPDATE BOARD
+		SET TITLE = #{board.title}, CONTENT = #{board.content}, UPDATE_DATE =
+		SYSDATE
+		WHERE BOARD_ID = #{boardId}
 	</update>
+
+	<insert id="fileUpload">
+		INSERT INTO BOARD_FILE VALUES(file_seq.nextval,
+									  (SELECT board_id FROM (
+										SELECT board_id FROM BOARD ORDER BY board_id DESC
+										) WHERE ROWNUM = 1),
+									   #{boardFile.path},
+									   #{boardFile.originName},
+									   #{boardFile.updateName},
+									   1
+		)
+	</insert>
 </mapper>

@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.community.board.dto.BoardDTO;
+import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.service.BoardService;
 import kr.co.community.board.util.Pagenation;
@@ -67,6 +69,7 @@ public class BoardController {
 
 		if (sessionId != null) {
 			model.addAttribute("boardDTO", new BoardDTO());
+			model.addAttribute("boardFileDTO", new BoardFileDTO());
 			return "board/write-post";
 		} else {
 			redirectAttributes.addFlashAttribute("boardCreateMsg", "글쓰기엔 로그인이 필요합니다.");
@@ -82,10 +85,12 @@ public class BoardController {
 	 * @return 게시글 목록 페이지로 리다이렉트 (redirect:/board/list)
 	 */
 	@PostMapping("/create")
-	public String create(BoardDTO boardDTO, @SessionAttribute("id") String sessionID) {
+	public String create(BoardDTO boardDTO, BoardFileDTO boardFileDTO,
+						 @SessionAttribute("id") String sessionID,
+						 @RequestParam(value = "file", required = false) MultipartFile file) {
 		boardDTO.setAuthor(sessionID);
 
-		boardService.create(boardDTO);
+		boardService.create(boardDTO, boardFileDTO, file);
 		return "redirect:/board/list";
 	}
 

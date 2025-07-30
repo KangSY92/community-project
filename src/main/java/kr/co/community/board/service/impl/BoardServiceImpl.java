@@ -1,14 +1,18 @@
 package kr.co.community.board.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.community.board.dto.BoardDTO;
+import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.mapper.BoardMapper;
 import kr.co.community.board.service.BoardService;
+import kr.co.community.member.util.FileUpload;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -21,6 +25,8 @@ public class BoardServiceImpl implements BoardService {
 	/** 게시판 데이트베이스 처리를 위한 매퍼 객체 */
 	private final BoardMapper boardMapper;
 
+	private final FileUpload fileUpload;
+
 	/**
 	 * 게시글을 등록합니다.
 	 * 
@@ -28,8 +34,20 @@ public class BoardServiceImpl implements BoardService {
 	 * @param sessionID 현재 로그인한 사용자 세션 ID
 	 */
 	@Override
-	public void create(BoardDTO boardDTO) {
+	public void create(BoardDTO boardDTO, BoardFileDTO boardFileDTO, MultipartFile file) {
 		boardMapper.create(boardDTO);
+		try {
+			System.out.println("123");
+			if (file != null && !file.isEmpty()) {
+				System.out.println("456");
+				fileUpload.upload(file, boardFileDTO);
+				boardMapper.fileUpload(boardDTO, boardFileDTO, file);
+				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**
@@ -83,7 +101,7 @@ public class BoardServiceImpl implements BoardService {
 	 */
 	@Override
 	public void delete(int boardId, String author, String sessionid) {
-			boardMapper.delete(boardId);
+		boardMapper.delete(boardId);
 
 	}
 
@@ -91,7 +109,7 @@ public class BoardServiceImpl implements BoardService {
 	 * 게시글을 수정합니다.
 	 * 
 	 * @param boardDTO 수정할 게시글 데이터
-	 * @param boardId 수정 대상 게시글 ID
+	 * @param boardId  수정 대상 게시글 ID
 	 */
 	@Override
 	public void edit(BoardDTO boardDTO, int boardId) {
