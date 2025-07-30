@@ -139,5 +139,25 @@ public class MemberController {
 			session.invalidate(); // 세션 무효화
 		return "redirect:/";
 	}
+	
+//	@GetMapping("/idCheckForm")
+//	public String idCheckForm(Model model) {
+//		model.addAttribute("registerDTO", new RegisterDTO());
+//		return "/member/idCheck";
+//	}
+	
+//	@PostMapping("/idCheck")
+//	public void idCheck(@RequestParam("id") String id) {
+//	System.out.println(id);
+//	int result = memberService.idCheck(id);
+//	System.out.println(result);
+//	
+//	if(result == 1) {
+//		System.out.println("중복된 ID가 있습니다.");
+//	} else {
+//		
+//	}
+//	
+//	}
 
 }
