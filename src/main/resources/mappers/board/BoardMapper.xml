@@ -12,6 +12,15 @@
 		<result column="update_date" property="updateDate" />
 		<result column="author" property="author" />
 	</resultMap>
+	
+	<resultMap id="boardFileResulMap" type="kr.co.community.board.dto.BoardFileDTO">
+		<result column="file_id" property="fileId" />
+		<result column="board_id" property="boardId" />
+		<result column="path" property="path" />
+		<result column="origin_name" property="originName" />
+		<result column="update_name" property="updateName" />
+		<result column="size" property="size" />
+	</resultMap>
 
 	<insert id="create">
 		INSERT INTO BOARD VALUES(board_seq.nextval,
@@ -73,8 +82,16 @@
 										) WHERE ROWNUM = 1),
 									   #{boardFile.path},
 									   #{boardFile.originName},
-									   #{boardFile.updateName},
-									   1
+									   #{boardFile.updateName}
 		)
 	</insert>
+	
+	<select id="fileInfo" resultMap="boardFileResulMap">
+	SELECT * FROM BOARD_FILE WHERE BOARD_ID = #{boardId}
+	</select>
+	
+	<delete id="fileDelete">
+	DELETE FROM BOARD_FILE WHERE BOARD_ID = #{boardId}
+	</delete>
+	
 </mapper>

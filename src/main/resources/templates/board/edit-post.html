@@ -27,20 +27,13 @@
 
 					<div class="form-group">
 						<label for="currentFiles">현재 첨부파일</label>
-						<div class="current-files">
-							<div class="file-item-preview">
-								<span class="file-name">추천장소_지도.pdf</span>
-								<span class="file-size">1.2MB</span>
-								<button type="button" class="btn-icon remove-file" data-file="추천장소_지도.pdf">
-									<span class="icon">×</span>
+						<div class="current-files" id="currentfilsediv" th:if="${boardFileDTO != null} and ${boardFileDTO.updateName != null}">
+							<div class="file-item-preview" style="display: flex;">
+								<span class="file-name"  th:text="${boardFileDTO.originName}"></span>
+								<button type="button" class="btn-icon remove-file">
+									<span class="icon" onclick="filedel()">×</span>
 								</button>
-							</div>
-							<div class="file-item-preview">
-								<span class="file-name">주말여행코스.jpg</span>
-								<span class="file-size">0.8MB</span>
-								<button type="button" class="btn-icon remove-file" data-file="주말여행코스.jpg">
-									<span class="icon">×</span>
-								</button>
+								<input type="hidden" name="fileDelete" id="fileDelete" value="false" />
 							</div>
 						</div>
 					</div>

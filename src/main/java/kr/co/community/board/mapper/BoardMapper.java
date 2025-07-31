@@ -29,4 +29,8 @@ public interface BoardMapper {
 
 	void fileUpload(@Param("board")BoardDTO boardDTO, @Param("boardFile")BoardFileDTO boardFileDTO, @Param("file")MultipartFile file);
 
+	BoardFileDTO fileInfo(int boardId);
+
+	void fileDelete(int boardId);
+
 }

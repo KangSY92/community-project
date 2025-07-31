@@ -23,4 +23,8 @@ public interface BoardService {
 	int viewCountplus(int boardId);
 
 	void edit(BoardDTO boardDTO, int boardId);
+
+	BoardFileDTO fileInfo(int boardId);
+
+	void fileDelete(int boardId);
 }

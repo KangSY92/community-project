@@ -110,7 +110,10 @@ public class BoardController {
 		BoardDTO result = boardService.detail(boardId);
 		model.addAttribute("board", result);
 		model.addAttribute(commentDTO);
-		
+				
+		BoardFileDTO boardFileDTO = boardService.fileInfo(boardId);
+		model.addAttribute("boardFileDTO", boardFileDTO);
+				
 		int totalCount = commentService.commentCount(boardId);
 		int pageLimit = 5;
 		int boardLimit = 5; 
@@ -183,6 +186,8 @@ public class BoardController {
 		
 		if (author.equals(sessionId)) {
 			model.addAttribute("board", result);
+			BoardFileDTO boardFileDTO = boardService.fileInfo(boardId);
+			model.addAttribute("boardFileDTO", boardFileDTO);
 			return "board/edit-post";
 		} else {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "다른 사용자 게시글은 수정 할 수 없습니다.");
@@ -202,7 +207,10 @@ public class BoardController {
 	@PostMapping("/edit")
 	public String edit(@RequestParam(name = "boardId") int boardId, BoardDTO boardDTO,
 					   @SessionAttribute(value="id", required=false) String sessionId,
+					   @RequestParam(name = "fileDelete") boolean fileDelete,
 					   RedirectAttributes redirectAttributes) {
+		
+		
 		
 		if(sessionId == null) {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "로그인이 필요합니다.");
@@ -212,7 +220,13 @@ public class BoardController {
 		BoardDTO result = boardService.detail(boardId);
 		String author = result.getAuthor();
 		
+
+	
+		
 		if (author.equals(sessionId)) {
+			if(fileDelete) {
+				boardService.fileDelete(boardId);
+			}
 			boardService.edit(boardDTO, boardId);
 			return "redirect:/board/detail?boardId=" + boardId;
 			

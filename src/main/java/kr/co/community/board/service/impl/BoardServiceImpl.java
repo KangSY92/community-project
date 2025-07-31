@@ -37,9 +37,7 @@ public class BoardServiceImpl implements BoardService {
 	public void create(BoardDTO boardDTO, BoardFileDTO boardFileDTO, MultipartFile file) {
 		boardMapper.create(boardDTO);
 		try {
-			System.out.println("123");
 			if (file != null && !file.isEmpty()) {
-				System.out.println("456");
 				fileUpload.upload(file, boardFileDTO);
 				boardMapper.fileUpload(boardDTO, boardFileDTO, file);
 				
@@ -114,6 +112,16 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void edit(BoardDTO boardDTO, int boardId) {
 		boardMapper.edit(boardDTO, boardId);
+	}
+
+	@Override
+	public BoardFileDTO fileInfo(int boardId) {
+		return boardMapper.fileInfo(boardId);
+	}
+
+	@Override
+	public void fileDelete(int boardId) {
+		boardMapper.fileDelete(boardId);
 	}
 
 }

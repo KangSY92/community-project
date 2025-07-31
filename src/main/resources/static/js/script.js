@@ -141,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
 					fileItem.innerHTML = `
             <div class="upload-file-info">
               <span class="upload-file-name">${file.name}</span>
-              <span class="upload-file-size">${formatFileSize(file.size)}</span>
             </div>
             <button class="btn-icon remove-file" data-index="${index}">
               <span class="icon">×</span>
@@ -215,7 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 					fileItem.innerHTML = `
             <span class="file-name">${file.name}</span>
-            <span class="file-size">${formatFileSize(file.size)}</span>
           `;
 
 					fileList.appendChild(fileItem);

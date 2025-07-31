@@ -15,7 +15,6 @@ public class BoardFileDTO {
 	private String path;
 	private String originName;
 	private String updateName;
-	private String size;
 	
 	public static final String LOCAL_PATH = "C:\\Users\\Foryoucom\\git\\community-project\\src\\main\\resources\\static\\uploads\\";
 	
