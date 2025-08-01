@@ -2,14 +2,17 @@ package kr.co.community.board.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import kr.co.community.board.dto.BoardDTO;
+import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
 
 public interface BoardService {
 
-	void create(BoardDTO boardDTO);
+	void create(BoardDTO boardDTO, BoardFileDTO boardFileDTO, MultipartFile file);
 	
-	List<BoardDTO> getList(PageDTO pi);
+	List<BoardDTO> getList(PageDTO pi, BoardDTO boardDTO);
 	
 	BoardDTO detail(int boardId);
 	
@@ -19,5 +22,9 @@ public interface BoardService {
 
 	int viewCountplus(int boardId);
 
-	void edit(BoardDTO boardDTO, int boardId);
+	void edit(BoardDTO boardDTO, int boardId, BoardFileDTO boardFileDTO, MultipartFile file);
+
+	BoardFileDTO fileInfo(int boardId);
+
+	void fileDelete(int boardId);
 }

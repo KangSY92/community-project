@@ -11,4 +11,6 @@ public interface MemberService {
 	void register(RegisterDTO registerDTO, AgreeDTO agreeDTO, MultipartFile profileImage);
 
 	RegisterDTO login(RegisterDTO registerDTO);
+
+	int idCheck(String id);
 }

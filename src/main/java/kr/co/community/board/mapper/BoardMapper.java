@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.community.board.dto.BoardDTO;
+import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
 
 @Mapper
@@ -13,7 +15,7 @@ public interface BoardMapper {
 
 	void create(BoardDTO boardDTO);
 
-	List<BoardDTO> getList(@Param("pi")PageDTO pi);
+	List<BoardDTO> getList(@Param("pi")PageDTO pi, @Param("board")BoardDTO boardDTO);
 
 	int getTotalCount(BoardDTO boardDTO);
 
@@ -25,4 +27,11 @@ public interface BoardMapper {
 
 	void edit(@Param("board")BoardDTO boardDTO, @Param("boardId")int boardId);
 
+	void fileUpload(@Param("board")BoardDTO boardDTO, @Param("boardFile")BoardFileDTO boardFileDTO, @Param("file")MultipartFile file);
+
+	BoardFileDTO fileInfo(int boardId);
+
+	void fileDelete(int boardId);
+
+	void fileUpdate(@Param("board")BoardDTO boardDTO,@Param("boardId") int boardId, @Param("boardFile")BoardFileDTO boardFileDTO, @Param("file")MultipartFile file);
 }

@@ -141,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
 					fileItem.innerHTML = `
             <div class="upload-file-info">
               <span class="upload-file-name">${file.name}</span>
-              <span class="upload-file-size">${formatFileSize(file.size)}</span>
             </div>
             <button class="btn-icon remove-file" data-index="${index}">
               <span class="icon">×</span>
@@ -215,7 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 					fileItem.innerHTML = `
             <span class="file-name">${file.name}</span>
-            <span class="file-size">${formatFileSize(file.size)}</span>
           `;
 
 					fileList.appendChild(fileItem);
@@ -280,18 +278,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
 	}
 });
-
-//댓글 내용 빈값이면 서브밋 막기
-function buttonbtn() {
-	const commentbtn = document.getElementById('commentBtn');
-	const commentcontent = document.getElementById('commentContent');
-	if (commentcontent.value.trim() === "") {
-		commentbtn.type = 'button';
-		alert('댓글을 입력해 주세요');
-	} else {
-		commentbtn.type = 'submit';
-	}
-}
 
 // CSS 클래스 토글 헬퍼 함수
 function toggleClass(element, className) {

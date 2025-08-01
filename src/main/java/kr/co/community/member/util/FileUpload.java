@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.member.dto.RegisterDTO;
 
 /**
@@ -49,6 +50,29 @@ public class FileUpload {
 		// 6. fileDTO에 저장 정보 세팅
 		registerDTO.setImgName(changeName);
 		registerDTO.setImgPath(RegisterDTO.RESOURCES_PATH);
+		
+	}
+	
+	public void upload(MultipartFile file, BoardFileDTO boardFileDTO) throws IOException {
+		// 1. 원본 파일 이름
+		String originalName = file.getOriginalFilename();
+		
+		// 2. 확장자 분리
+		String extension = originalName.substring(originalName.lastIndexOf("."));
+		
+		// 3. 중복방지를 위한 UUID기반 새 파일 이름 생성
+		String changeName = UUID.randomUUID().toString() + extension; 
+		
+		// 4. 저장 경로 지정
+		Path path = Paths.get(BoardFileDTO.LOCAL_PATH + changeName);
+		
+		// 5. 파일 저장
+		Files.write(path, file.getBytes());
+		
+		// 6. fileDTO에 저장 정보 세팅
+		boardFileDTO.setOriginName(originalName);
+		boardFileDTO.setUpdateName(changeName);
+		boardFileDTO.setPath(BoardFileDTO.RESOURCES_PATH);
 		
 	}
 	
