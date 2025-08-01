@@ -33,4 +33,5 @@ public interface BoardMapper {
 
 	void fileDelete(int boardId);
 
+	void fileUpdate(@Param("board")BoardDTO boardDTO,@Param("boardId") int boardId, @Param("boardFile")BoardFileDTO boardFileDTO, @Param("file")MultipartFile file);
 }

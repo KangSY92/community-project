@@ -22,7 +22,7 @@ public interface BoardService {
 
 	int viewCountplus(int boardId);
 
-	void edit(BoardDTO boardDTO, int boardId);
+	void edit(BoardDTO boardDTO, int boardId, BoardFileDTO boardFileDTO, MultipartFile file);
 
 	BoardFileDTO fileInfo(int boardId);
 

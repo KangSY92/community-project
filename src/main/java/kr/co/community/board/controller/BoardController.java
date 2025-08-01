@@ -40,8 +40,10 @@ public class BoardController {
 	 * @return 게시글 목록 화면의 뷰 이름 (board/board)
 	 */
 	@GetMapping("/list")
-	public String boardList(BoardDTO boardDTO, @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
-			Model model) {
+	public String boardList(BoardDTO boardDTO,
+							@RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
+							@RequestParam(value = "text", required = false) String text,
+							Model model) {
 
 		int totalCount = boardService.getTotalCount(boardDTO); // 전체 게시글 수
 		int pageLimit = 5; // (버튼에) 보여질 페이지 수
@@ -51,6 +53,8 @@ public class BoardController {
 		
 		PageDTO pi = pagenation.getpageDTO(totalCount, currentPage, pageLimit, boardLimit);
 
+		boardDTO.setText(text);
+		
 		List<BoardDTO> boards = boardService.getList(pi, boardDTO);
 		model.addAttribute("boards", boards);
 		model.addAttribute("pi", pi);
@@ -82,6 +86,7 @@ public class BoardController {
 	 * 
 	 * @param boardDTO  사용자가 입력한 게시글 정보
 	 * @param sessionID 세션에 저장된 로그인 사용자 ID
+	 * @param file 업로드할 첨부파일
 	 * @return 게시글 목록 페이지로 리다이렉트 (redirect:/board/list)
 	 */
 	@PostMapping("/create")
@@ -138,7 +143,7 @@ public class BoardController {
 	 * 
 	 * @param boardId            삭제할 게시글의 ID
 	 * @param author             게시글 작성자 ID
-	 * @param sessionID          HttpSession 객체를 통해 세션에 저장된 로그인 사용자 ID를 가져옵니다.
+	 * @param sessionId          HttpSession 객체를 통해 세션에 저장된 로그인 사용자 ID를 가져옵니다.
 	 * @param redirectAttributes 리다이렉트시 사용자 메시지 전달용 객체
 	 * @return 게시글 목록 페이지로 리다이렉트 (삭제 성공/실패/로그인필요에 관계 없이 redirect:/board/list)
 	 */
@@ -197,17 +202,22 @@ public class BoardController {
 	}
 
 	/**
-	 * 게시글 수정을 처리합니다.
+	 * 게시글 수정을 처리합니다. 기존 파일 삭제 여부 및 새 파일 업로드 모두 처리됩니다.
 	 * 
-	 * @param boardId 수정할 게시글의 ID
-	 * @param boardDTO 사용자가 입력한 수정된 게시글 정보 DTO
-	 * @param redirectAttributes 리다이렉트시 사용자 메시지 전달용 객체
+	 * @param boardId 게시글 ID
+	 * @param boardDTO 수정된 게시글 정보
+	 * @param boardFileDTO 수정된 파일 정보
+	 * @param sessionId 로그인 사용자 ID
+	 * @param fileDelete 파일 삭제 여부 (true: 삭제)
+	 * @param file 새로 업로드할 파일
+	 * @param redirectAttributes 리다이렉트 메시지 전달용 객체
 	 * @return 수정된 게시글 상세 페이지로 리다이렉트
 	 */
 	@PostMapping("/edit")
-	public String edit(@RequestParam(name = "boardId") int boardId, BoardDTO boardDTO,
+	public String edit(@RequestParam(name = "boardId") int boardId, BoardDTO boardDTO, BoardFileDTO boardFileDTO,
 					   @SessionAttribute(value="id", required=false) String sessionId,
 					   @RequestParam(name = "fileDelete") boolean fileDelete,
+					   @RequestParam(value = "file", required = false) MultipartFile file,
 					   RedirectAttributes redirectAttributes) {
 		
 		
@@ -227,7 +237,7 @@ public class BoardController {
 			if(fileDelete) {
 				boardService.fileDelete(boardId);
 			}
-			boardService.edit(boardDTO, boardId);
+			boardService.edit(boardDTO, boardId, boardFileDTO, file);
 			return "redirect:/board/detail?boardId=" + boardId;
 			
 		} else {

@@ -94,4 +94,13 @@
 	DELETE FROM BOARD_FILE WHERE BOARD_ID = #{boardId}
 	</delete>
 	
+	<insert id="fileUpdate">
+	INSERT INTO BOARD_FILE VALUES(file_seq.nextval,
+									  #{boardId},
+									   #{boardFile.path},
+									   #{boardFile.originName},
+									   #{boardFile.updateName}
+		)
+	</insert>
+	
 </mapper>

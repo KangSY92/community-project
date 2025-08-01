@@ -12,7 +12,7 @@
 			<div class="container">
 				<h2>게시글 수정</h2>
 
-				<form th:action="@{/board/edit}" method="post" th:object="${board}" id="editPostForm" class="post-form">
+				<form th:action="@{/board/edit}" method="post" th:object="${board}" id="editPostForm" class="post-form" enctype="multipart/form-data">
 					<input type="hidden" name="author" th:value="${board.author}">
 					<input type="hidden" name="boardId" th:value="${board.boardId}">
 					<div class="form-group">
@@ -41,9 +41,10 @@
 					<div class="form-group">
 						<label for="postFiles">새 파일 첨부</label>
 						<div class="file-upload">
-							<input type="file" id="postFiles" name="files" multiple>
+							<input type="file" id="postFiles" name="file"
+							th:disabled="${boardFileDTO != null and boardFileDTO.updateName != null}">
 							<div class="file-upload-info">
-								<p>최대 5개의 파일, 각 파일당 10MB까지 업로드 가능</p>
+								<p id="updateFileP">새로운 파일 선택을 원하시면 현재 첨부파일을 삭제해주세요</p>
 								<p>지원 형식: jpg, png, gif, pdf, doc, docx, ppt, pptx, xls, xlsx</p>
 							</div>
 						</div>
