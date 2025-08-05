@@ -122,9 +122,4 @@ public class MemberServiceImpl implements MemberService {
 	    }
 	}
 
-	@Override
-	public int idCheck(String id) {
-		int result = memberMapper.idCheck(id);
-		return result;
-	}
 }

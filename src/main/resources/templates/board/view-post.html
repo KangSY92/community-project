@@ -40,11 +40,11 @@
 
 					</div>
 
-					<div class="post-files">
+					<div class="post-files" th:if="${boardFileDTO != null} and ${boardFileDTO.updateName != null}">
 						<h4>첨부파일</h4>
 						<ul>
-							<li><a href="#">추천장소_지도.pdf</a> (1.2MB)</li>
-							<li><a href="#">주말여행코스.jpg</a> (0.8MB)</li>
+							<li><a th:href="@{${boardFileDTO.path + boardFileDTO.updateName}}"
+								 th:text="${boardFileDTO.originName}" target="_blank"></a></li>
 						</ul>
 					</div>
 

@@ -24,15 +24,6 @@ function idCheck() {
 	}
 }
 
-/*function idDoubleCheck() {
-	const idchkbtn = document.getElementById('idChkBtn');
-	if(!idFlag) {
-		alert('ID형식을 지켜주세요');
-	} else {
-		idchkbtn.type = 'submit';
-	}
-}*/
-
 function passCheck() {
 	let pchk = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
 	const registerPassword = document.getElementById('registerPassword').value;
@@ -131,16 +122,6 @@ function AgreeCheckbox() {
 	}
 
 }
-
-function idPopup() {
-	var popupX = Math.round((window.screen.width / 2) - (700 / 2));
-	var popupY = Math.round((window.screen.height / 2) - (300 / 2));
-	var windowopen = "width=700,height=300,top=" + popupY + ",left=" + popupX + ",resizable=no"
-
-	window.open("/member/idCheckForm", "popupWindow", windowopen);
-
-}
-
 
 function allCheck() {
 	if (idFlag && passFlag && emailFlag && nicknameFlag && confirmFlag && AgreeCheckbox()) {

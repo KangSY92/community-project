@@ -15,7 +15,7 @@
       <div class="container">
         <h2>게시글 작성</h2>
         
-        <form th:action="@{/board/create}" method="post" th:object="${boardDTO}" id="postForm" class="post-form">
+        <form th:action="@{/board/create}" method="post" th:object="${boardDTO}" enctype="multipart/form-data" id="postForm" class="post-form">
           <div class="form-group">
             <label for="postTitle">제목</label>
             <input type="text" id="postTitle" name="title" th:field="*{title}" required>
@@ -29,9 +29,8 @@
           <div class="form-group">
             <label for="postFiles">파일 첨부</label>
             <div class="file-upload">
-              <input type="file" id="postFiles" name="files" multiple>
+              <input type="file" id="postFiles" name="file">
               <div class="file-upload-info">
-                <p>최대 5개의 파일, 각 파일당 10MB까지 업로드 가능</p>
                 <p>지원 형식: jpg, png, gif, pdf, doc, docx, ppt, pptx, xls, xlsx</p>
               </div>
             </div>

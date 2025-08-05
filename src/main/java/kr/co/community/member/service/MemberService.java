@@ -12,5 +12,4 @@ public interface MemberService {
 
 	RegisterDTO login(RegisterDTO registerDTO);
 
-	int idCheck(String id);
 }
