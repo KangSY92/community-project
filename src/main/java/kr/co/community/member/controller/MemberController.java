@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
+import kr.co.community.member.dto.RequestRegisterDTO;
 import kr.co.community.member.service.impl.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 
@@ -65,10 +66,8 @@ public class MemberController {
 	 * @return 리다이렉트 대상 경로
 	 */
 	@PostMapping("/register")
-	public String register(@Valid RegisterDTO registerDTO, 
-						   AgreeDTO agreeDTO, 
+	public String register(@Valid RequestRegisterDTO requestRegisterDTO, 
 						   BindingResult bindingResult,
-						   @RequestParam("profileImage") MultipartFile profileImage,
 						   RedirectAttributes redirectAttributes,
 						   Model model) {
     	
@@ -77,14 +76,14 @@ public class MemberController {
 				//유효성 검사 오류가 있는 경우 회원가입 폼으로 되돌아감
 				return "redirect:/member/register/form";
 			}
-			
 			//회원가입 처리 서비스 호출
-			memberService.register(registerDTO, agreeDTO, profileImage);
+			memberService.register(requestRegisterDTO);
 			redirectAttributes.addFlashAttribute("registMsg", "회원가입에 성공했습니다.");
 			//메인페이지로 이동
 			return "redirect:/";
 			
 		} catch(Exception e) {
+			e.printStackTrace();
 			redirectAttributes.addFlashAttribute("registMsg", "회원가입에 실패했습니다.");
 			return "redirect:/member/register/form"; 
 		}

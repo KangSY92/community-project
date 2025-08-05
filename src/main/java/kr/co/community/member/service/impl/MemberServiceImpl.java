@@ -10,8 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.community.global.transaction.TransactionHandler;
+import kr.co.community.member.domain.Agree;
+import kr.co.community.member.domain.Member;
 import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
+import kr.co.community.member.dto.RequestRegisterDTO;
 import kr.co.community.member.exception.MemberException;
 import kr.co.community.member.mapper.MemberMapper;
 import kr.co.community.member.service.MemberService;
@@ -55,7 +58,7 @@ public class MemberServiceImpl implements MemberService {
 	 * @throws MemberException 파일 업로드 또는 DB 저장 실패 시 발생
 	 */
 	@Override
-	public void register(RegisterDTO registerDTO, AgreeDTO agreeDTO, MultipartFile profileImage) {
+	public void register(RequestRegisterDTO requestRegisterDTO) {
 
 		// 1. 트랜잭션 설정 및 시작(현재 트랜잭션의 상태를 가져옴)
 		TransactionStatus status = transactionHandler.getStatus();
@@ -63,26 +66,29 @@ public class MemberServiceImpl implements MemberService {
 		// 2. commit, rollback을 사용하기 위한 객체
 		PlatformTransactionManager transactionManager = transactionHandler.getTransactionManager();
 
+		Agree agree = requestRegisterDTO.toAgree();
+
 		try {
 			// 비밀번호 암호화
-			String rawPassword = registerDTO.getPassword();
+			String rawPassword = requestRegisterDTO.getPassword();
 			String passEncode = passwordEncoder.encode(rawPassword);
-			registerDTO.setPassword(passEncode);
 
+			Member member = requestRegisterDTO.toMember(passEncode);
 			// 프로필 이미지 업로드 처리
-			if (profileImage != null && !profileImage.isEmpty()) {
-				fileUpload.upload(profileImage, registerDTO);
+			if (requestRegisterDTO.getProfileImage() != null && !requestRegisterDTO.getProfileImage().isEmpty()) {
+				
+				fileUpload.upload(requestRegisterDTO.getProfileImage(), member, RequestRegisterDTO.LOCAL_PATH, RequestRegisterDTO.IMG_PATH);
 			} else {
 				// 이미지가 없을 경우 기본 이미지 설정
-				registerDTO.setImgName("profil-img.png");
-				registerDTO.setImgPath(RegisterDTO.RESOURCES_PATH);
+				member.setImgName("profil-img.png");
+				member.setImgPath(RequestRegisterDTO.IMG_PATH);
 			}
 
 			// 회원정보 및 약관 동의 내역 저장(insert)
-			memberMapper.register(registerDTO, agreeDTO, profileImage);
-			memberMapper.termsAgree(agreeDTO);
-			memberMapper.privacyAgree(agreeDTO);
-			memberMapper.marketingAgree(agreeDTO);
+			memberMapper.register(member);
+			memberMapper.termsAgree(agree);
+			memberMapper.privacyAgree(agree);
+			memberMapper.marketingAgree(agree);
 
 			// 모든 작업 성공시 커밋
 			transactionManager.commit(status);

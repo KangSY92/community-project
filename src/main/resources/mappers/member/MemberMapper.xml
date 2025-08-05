@@ -5,16 +5,16 @@
 
 	<insert id="register">
 		INSERT INTO MEMBER VALUES(member_seq.nextval,
-		#{registerDTO.id},
-		#{registerDTO.name},
-		#{registerDTO.password},
+		#{id},
+		#{name},
+		#{password},
 		DEFAULT,
 		DEFAULT,
 		null,
 		null,
-		#{registerDTO.imgName},
-		#{registerDTO.imgPath},
-		#{registerDTO.email})
+		#{imgName},
+		#{imgPath},
+		#{email})
 	</insert>
 		<insert id="termsAgree">
 		INSERT INTO AGREE VALUES(agree_seq.nextval,
@@ -52,10 +52,10 @@
 		WHERE TITLE = '마케팅 정보 수신 동의(선택)'
 		ORDER BY CREATE_DATE DESC)
 		WHERE ROWNUM = 1),
-		#{marketingAgree})
+		#{agreement})
 	</insert>
 	
-	<resultMap id="loginResultMap" type="kr.co.community.member.dto.RegisterDTO">
+	<resultMap id="loginResultMap" type="kr.co.community.member.domain.Member">
 		<result column="MEMBER_ID" property="memberId" />
 		<result column="ID" property="id" />
 		<result column="NAME" property="name" />

@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.community.member.domain.Agree;
+import kr.co.community.member.domain.Member;
 import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
 
@@ -24,30 +26,28 @@ public interface MemberMapper {
 	 * @param agreeDTO 약관 동의 정보
 	 * @param profileImage 프로필 이미지(실제 DB에 저장하지 않더라도 서비스 계층에서 필요함
 	 */
-	void register(@Param("registerDTO")RegisterDTO registerDTO,
-				  @Param("agreeDTO")AgreeDTO agreeDTO,
-				  MultipartFile profileImage);
+	void register(Member membe);
 	
 	/**
 	 * 이용약관 동의 여부를 DB에 저장합니다.
 	 * 
 	 * @param agreeDTO 약관 동의 정보
 	 */
-	void termsAgree(AgreeDTO agreeDTO);
+	void termsAgree(Agree agree);
 	
 	/**
 	 * 개인정보 처리방침 동의 여부를 DB에 저장합니다.
 	 * 
 	 * @param agreeDTO 약관 동의 정보
 	 */
-	void privacyAgree(AgreeDTO agreeDTO);
+	void privacyAgree(Agree agree);
 	
 	/**
 	 * 마케팅 정보 수신 동의 여부를 DB에 저장합니다.
 	 * 
 	 * @param agreeDTO 약관 동의 정보
 	 */
-	void marketingAgree(AgreeDTO agreeDTO);
+	void marketingAgree(Agree agree);
 
 	/**
 	 * 사용자 로그인 시, 입력된 ID에 해당하는 회원 정보를 조회합니다.

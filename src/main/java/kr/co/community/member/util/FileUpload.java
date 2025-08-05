@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.community.board.dto.BoardFileDTO;
+import kr.co.community.member.domain.Member;
 import kr.co.community.member.dto.RegisterDTO;
+import kr.co.community.member.dto.RequestRegisterDTO;
 
 /**
  * 회원 프로필 이미지를 서버에 업로드하는 기능을 제공하는 유틸리티 클래스입니다.
@@ -31,7 +33,7 @@ public class FileUpload {
 	 * @param registerDTO 파일 정보를 설정할 회원 등록 DTO
 	 * @throws IOException 파일 저장 중 오류 발생 시
 	 */
-	public void upload(MultipartFile file, RegisterDTO registerDTO) throws IOException {
+	public void upload(MultipartFile file, Member member, String LOCAL_PATH, String IMG_PATH) throws IOException {
 		// 1. 원본 파일 이름
 		String originalName = file.getOriginalFilename();
 		
@@ -42,14 +44,14 @@ public class FileUpload {
 		String changeName = UUID.randomUUID().toString() + extension; 
 		
 		// 4. 저장 경로 지정
-		Path path = Paths.get(RegisterDTO.LOCAL_PATH + changeName);
+		Path path = Paths.get(LOCAL_PATH + changeName);
 		
 		// 5. 파일 저장
 		Files.write(path, file.getBytes());
 		
 		// 6. fileDTO에 저장 정보 세팅
-		registerDTO.setImgName(changeName);
-		registerDTO.setImgPath(RegisterDTO.RESOURCES_PATH);
+		member.setImgName(changeName);
+		member.setImgPath(IMG_PATH);
 		
 	}
 	
