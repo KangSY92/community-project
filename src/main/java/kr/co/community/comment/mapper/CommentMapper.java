@@ -17,4 +17,8 @@ public interface CommentMapper {
 
 	int commentCount(int boardId);
 
+	void delete(int commentId);
+
+	void commentEdit(@Param("commentId")int commentId, @Param("comment")CommentDTO commentDTO);
+
 }

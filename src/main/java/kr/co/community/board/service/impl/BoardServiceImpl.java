@@ -39,8 +39,8 @@ public class BoardServiceImpl implements BoardService {
 	 * @return 게시글 리스트
 	 */
 	@Override
-	public List<BoardDTO> getList(PageDTO pi) {
-		return boardMapper.getList(pi);
+	public List<BoardDTO> getList(PageDTO pi, BoardDTO boardDTO) {
+		return boardMapper.getList(pi, boardDTO);
 	}
 
 	/**

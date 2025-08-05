@@ -49,9 +49,10 @@ public class BoardController {
 		
 		PageDTO pi = pagenation.getpageDTO(totalCount, currentPage, pageLimit, boardLimit);
 
-		List<BoardDTO> boards = boardService.getList(pi);
+		List<BoardDTO> boards = boardService.getList(pi, boardDTO);
 		model.addAttribute("boards", boards);
 		model.addAttribute("pi", pi);
+		model.addAttribute("boardDTO", boardDTO);
 		return "board/board";
 	}
 

@@ -53,6 +53,22 @@ public class CommentServiceImpl implements CommentService {
 	public int commentCount(int boardId) {
 		return commentMapper.commentCount(boardId);
 	}
+
+	/**
+	 * 댓글 ID를 기반으로 해당 댓글을 삭제합니다.
+	 * 
+	 * @param commentId 삭제할 댓글의 ID
+	 */
+	@Override
+	public void delete(int commentId) {
+		commentMapper.delete(commentId);
+	}
+
+	@Override
+	public void commentEdit(int commentId, CommentDTO commentDTO) {
+		commentMapper.commentEdit(commentId, commentDTO);
+		
+	}
 	
 
 

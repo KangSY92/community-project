@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head th:insert="~{fragments/common/head :: head}">
+
+<body>
+
+<main>
+	<form th:action="@{/member/idCheck}" method="post">
+		<div style="display: flex;">
+		<input type="text" name="id" id="idChecking" placeholder="사용할 ID를 입력해주세요" onkeyup="idCheck()" required/>
+		<button id="idChkBtn" type="button" style="width: 70px;" onclick="idDoubleCheck()">중복체크</button>
+		</div>
+		<small id="id-hint" class="form-hint">영문, 숫자 조합 5~20자</small>
+	</form>
+
+</main>
+
+</body>
+</html>

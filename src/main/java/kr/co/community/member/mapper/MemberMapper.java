@@ -56,4 +56,6 @@ public interface MemberMapper {
 	 * @return 회원정보가 존재하면 해당 정보를 반환, 없으면 null
 	 */
 	RegisterDTO login(RegisterDTO registerDTO);
+
+	int idCheck(String id);
 }
