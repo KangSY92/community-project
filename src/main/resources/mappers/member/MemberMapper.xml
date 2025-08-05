@@ -73,8 +73,4 @@
 		SELECT id, name, password, img_name, img_path, email FROM MEMBER WHERE id=#{id}
 	</select>
 
-	<select id="idCheck">
-		SELECT count(*) FROM MEMBER WHERE ID = #{id}
-	</select>
-
 </mapper>

@@ -57,5 +57,4 @@ public interface MemberMapper {
 	 */
 	RegisterDTO login(RegisterDTO registerDTO);
 
-	int idCheck(String id);
 }
