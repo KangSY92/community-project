@@ -13,8 +13,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import kr.co.community.member.domain.Member;
 import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
+import kr.co.community.member.dto.RequestLoginDTO;
 import kr.co.community.member.dto.RequestRegisterDTO;
 import kr.co.community.member.service.impl.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -101,16 +103,16 @@ public class MemberController {
 	 * @return 메인페이지로 리다이렉트
 	 */
 	@PostMapping("/login")
-	public String login(RegisterDTO registerDTO, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String login(RequestLoginDTO requestLoginDTO, HttpSession session, RedirectAttributes redirectAttributes) {
 
-			RegisterDTO result = memberService.login(registerDTO);
+			Member result = memberService.login(requestLoginDTO);
 			
 	        if (result == null) {
 	        	redirectAttributes.addFlashAttribute("loginFailMsg", "존재하지 않는 사용자입니다.");
 	        	return "redirect:/";
 	        }
-
-	        if (!passwordEncoder.matches(registerDTO.getPassword(), result.getPassword())) {
+	        
+	        if (!passwordEncoder.matches(requestLoginDTO.getPassword(), result.getPassword())) {
 	        	redirectAttributes.addFlashAttribute("loginFailMsg", "비밀번호가 일치하지 않습니다.");
 	        	return "redirect:/";
 	        }

@@ -8,6 +8,7 @@ import kr.co.community.member.domain.Agree;
 import kr.co.community.member.domain.Member;
 import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
+import kr.co.community.member.dto.RequestLoginDTO;
 
 /**
  * 회원 관련 DB 연산을 담당하는 매퍼 인터페이스입니다.
@@ -55,6 +56,6 @@ public interface MemberMapper {
 	 * @param registerDTO 로그인 요청 정보(아이디, 비밀번호)
 	 * @return 회원정보가 존재하면 해당 정보를 반환, 없으면 null
 	 */
-	RegisterDTO login(RegisterDTO registerDTO);
+	Member login(RequestLoginDTO requestLoginDTO);
 
 }

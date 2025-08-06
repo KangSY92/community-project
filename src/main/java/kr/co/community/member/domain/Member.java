@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 public class Member {
 
-	private int memeberId;
+	private int memberId;
 	private String id;
 	private String name;
 	private String password;

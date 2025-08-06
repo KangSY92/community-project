@@ -12,8 +12,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import kr.co.community.global.transaction.TransactionHandler;
 import kr.co.community.member.domain.Agree;
 import kr.co.community.member.domain.Member;
-import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
+import kr.co.community.member.dto.RequestLoginDTO;
 import kr.co.community.member.dto.RequestRegisterDTO;
 import kr.co.community.member.exception.MemberException;
 import kr.co.community.member.mapper.MemberMapper;
@@ -114,16 +114,17 @@ public class MemberServiceImpl implements MemberService {
 	 *  @return 로그인 성공 시 사용자 정보 반환, 실패시 null
 	 *  @throws MemberException 로그인 처리 중 예외가 발생하면 해당 예외를 던집니다.
 	 */
-	public RegisterDTO login(RegisterDTO registerDTO) {
+	public Member login(RequestLoginDTO requestLoginDTO) {
 
 	    try {
-	        RegisterDTO result = memberMapper.login(registerDTO);
+	        Member result = memberMapper.login(requestLoginDTO);
 
 	        return result;
 
 	    } catch (MemberException e) {
 	        throw e;
 	    } catch (Exception e) {
+	    	e.printStackTrace();  
 	        throw new MemberException("로그인 중 오류가 발생했습니다.", e); 
 	    }
 	}
