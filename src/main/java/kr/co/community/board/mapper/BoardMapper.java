@@ -9,15 +9,17 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.board.dto.RequestBoardDTO;
+import kr.co.community.comment.domain.Board;
 
 @Mapper
 public interface BoardMapper {
 
 	void create(BoardDTO boardDTO);
 
-	List<BoardDTO> getList(@Param("pi")PageDTO pi, @Param("board")BoardDTO boardDTO);
+	List<BoardDTO> getList(@Param("pi")PageDTO pi, @Param("board")Board board);
 
-	int getTotalCount(BoardDTO boardDTO);
+	int getTotalCount(Board board);
 
 	int viewCount(int boardId);
 

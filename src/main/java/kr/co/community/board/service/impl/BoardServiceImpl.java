@@ -10,8 +10,11 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.board.dto.RequestBoardDTO;
+import kr.co.community.board.dto.ResponseListDTO;
 import kr.co.community.board.mapper.BoardMapper;
 import kr.co.community.board.service.BoardService;
+import kr.co.community.comment.domain.Board;
 import kr.co.community.member.util.FileUpload;
 import lombok.RequiredArgsConstructor;
 
@@ -56,8 +59,10 @@ public class BoardServiceImpl implements BoardService {
 	 * @return 게시글 리스트
 	 */
 	@Override
-	public List<BoardDTO> getList(PageDTO pi, BoardDTO boardDTO) {
-		return boardMapper.getList(pi, boardDTO);
+	public ResponseListDTO getList(PageDTO pi, RequestBoardDTO requestBoardDTO) {
+		Board board = requestBoardDTO.toBoard();
+		List<BoardDTO> resultList = boardMapper.getList(pi, board);
+		return ResponseListDTO.from(resultList, pi, requestBoardDTO.getText());
 	}
 
 	/**
@@ -67,8 +72,9 @@ public class BoardServiceImpl implements BoardService {
 	 * @return 전체 게시글 수
 	 */
 	@Override
-	public int getTotalCount(BoardDTO boardDTO) {
-		return boardMapper.getTotalCount(boardDTO);
+	public int getTotalCount(RequestBoardDTO requestBoardDTO) {
+		Board board = requestBoardDTO.toBoard();
+		return boardMapper.getTotalCount(board);
 	}
 
 	/**

@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.board.dto.RequestBoardDTO;
+import kr.co.community.board.dto.ResponseListDTO;
 import kr.co.community.board.service.BoardService;
 import kr.co.community.board.util.Pagenation;
 import kr.co.community.comment.dto.CommentDTO;
@@ -40,25 +42,21 @@ public class BoardController {
 	 * @return 게시글 목록 화면의 뷰 이름 (board/board)
 	 */
 	@GetMapping("/list")
-	public String boardList(BoardDTO boardDTO,
-							@RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
-							@RequestParam(value = "text", required = false) String text,
+	public String boardList(RequestBoardDTO requestBoardDTO,
 							Model model) {
 
-		int totalCount = boardService.getTotalCount(boardDTO); // 전체 게시글 수
+		int totalCount = boardService.getTotalCount(requestBoardDTO); // 전체 게시글 수
 		int pageLimit = 5; // (버튼에) 보여질 페이지 수
 		int boardLimit = 5; // 한 페이지에 들어갈 게시글 수
 
 		Pagenation pagenation = new Pagenation();
 		
-		PageDTO pi = pagenation.getpageDTO(totalCount, currentPage, pageLimit, boardLimit);
-
-		boardDTO.setText(text);
+		PageDTO pi = pagenation.getpageDTO(totalCount, requestBoardDTO.getCurrentPage(), pageLimit, boardLimit);
 		
-		List<BoardDTO> boards = boardService.getList(pi, boardDTO);
-		model.addAttribute("boards", boards);
-		model.addAttribute("pi", pi);
-		model.addAttribute("boardDTO", boardDTO);
+		ResponseListDTO boards = boardService.getList(pi, requestBoardDTO);
+		model.addAttribute("boards", boards.getList());
+		model.addAttribute("search", boards.getSearch());
+		model.addAttribute("pi", boards.getPage());
 		return "board/board";
 	}
 
