@@ -1,16 +1,13 @@
 package kr.co.community.member.service;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import kr.co.community.member.domain.Member;
-import kr.co.community.member.dto.RegisterDTO;
 import kr.co.community.member.dto.RequestLoginDTO;
 import kr.co.community.member.dto.RequestRegisterDTO;
+import kr.co.community.member.dto.ResponseLoginDTO;
 
 public interface MemberService {
 	
 	void register(RequestRegisterDTO requestRegisterDTO);
 
-	Member login(RequestLoginDTO requestLoginDTO);
+	ResponseLoginDTO login(RequestLoginDTO requestLoginDTO);
 
 }

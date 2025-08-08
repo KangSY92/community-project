@@ -1,13 +1,9 @@
 package kr.co.community.member.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.community.member.domain.Agree;
 import kr.co.community.member.domain.Member;
-import kr.co.community.member.dto.AgreeDTO;
-import kr.co.community.member.dto.RegisterDTO;
 import kr.co.community.member.dto.RequestLoginDTO;
 
 /**

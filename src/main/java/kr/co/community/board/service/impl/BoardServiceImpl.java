@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.board.dto.RequestBoardCreateDTO;
 import kr.co.community.board.dto.RequestBoardDTO;
 import kr.co.community.board.dto.ResponseListDTO;
 import kr.co.community.board.mapper.BoardMapper;
@@ -38,12 +39,18 @@ public class BoardServiceImpl implements BoardService {
 	 * @param sessionID 현재 로그인한 사용자 세션 ID
 	 */
 	@Override
-	public void create(BoardDTO boardDTO, BoardFileDTO boardFileDTO, MultipartFile file) {
-		boardMapper.create(boardDTO);
+	public void create(RequestBoardCreateDTO requestBoardCreateDTO) {
+		Board board = requestBoardCreateDTO.toBoard();
+		boardMapper.create(board);
+		
 		try {
+			MultipartFile file = requestBoardCreateDTO.getFile(); 
 			if (file != null && !file.isEmpty()) {
+				
+				BoardFileDTO boardFileDTO = new BoardFileDTO();
+				
 				fileUpload.upload(file, boardFileDTO);
-				boardMapper.fileUpload(boardDTO, boardFileDTO, file);
+				boardMapper.fileUpload(board, boardFileDTO, file);
 				
 			}
 		} catch (IOException e) {

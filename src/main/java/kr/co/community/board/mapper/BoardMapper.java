@@ -9,13 +9,14 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.board.dto.RequestBoardCreateDTO;
 import kr.co.community.board.dto.RequestBoardDTO;
 import kr.co.community.comment.domain.Board;
 
 @Mapper
 public interface BoardMapper {
 
-	void create(BoardDTO boardDTO);
+	void create(Board board);
 
 	List<BoardDTO> getList(@Param("pi")PageDTO pi, @Param("board")Board board);
 
@@ -29,7 +30,7 @@ public interface BoardMapper {
 
 	void edit(@Param("board")BoardDTO boardDTO, @Param("boardId")int boardId);
 
-	void fileUpload(@Param("board")BoardDTO boardDTO, @Param("boardFile")BoardFileDTO boardFileDTO, @Param("file")MultipartFile file);
+	void fileUpload(@Param("board")Board board, @Param("boardFile")BoardFileDTO boardFileDTO, @Param("file")MultipartFile file);
 
 	BoardFileDTO fileInfo(int boardId);
 

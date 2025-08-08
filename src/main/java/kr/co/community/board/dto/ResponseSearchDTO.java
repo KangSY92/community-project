@@ -9,7 +9,7 @@ public class ResponseSearchDTO {
 	
 	private String text;
 
-	public static ResponseSearchDTO  from(String text) {
+	public static ResponseSearchDTO from(String text) {
 		return ResponseSearchDTO.builder()
 				.text(text)
 				.build();

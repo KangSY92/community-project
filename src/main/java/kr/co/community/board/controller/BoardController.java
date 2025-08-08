@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.board.dto.RequestBoardCreateDTO;
 import kr.co.community.board.dto.RequestBoardDTO;
 import kr.co.community.board.dto.ResponseListDTO;
 import kr.co.community.board.service.BoardService;
@@ -70,7 +71,7 @@ public class BoardController {
 	public String createForm(Model model, @SessionAttribute(value="id", required=false) String sessionId, RedirectAttributes redirectAttributes) {
 
 		if (sessionId != null) {
-			model.addAttribute("boardDTO", new BoardDTO());
+			model.addAttribute("requestBoardCreateDTO", new RequestBoardCreateDTO());
 			model.addAttribute("boardFileDTO", new BoardFileDTO());
 			return "board/write-post";
 		} else {
@@ -88,12 +89,12 @@ public class BoardController {
 	 * @return 게시글 목록 페이지로 리다이렉트 (redirect:/board/list)
 	 */
 	@PostMapping("/create")
-	public String create(BoardDTO boardDTO, BoardFileDTO boardFileDTO,
-						 @SessionAttribute("id") String sessionID,
-						 @RequestParam(value = "file", required = false) MultipartFile file) {
-		boardDTO.setAuthor(sessionID);
+	public String create(RequestBoardCreateDTO requestBoardCreateDTO,
+						 @SessionAttribute("id") String sessionID
+						 ) {
+		requestBoardCreateDTO.setAuthor(sessionID);
 
-		boardService.create(boardDTO, boardFileDTO, file);
+		boardService.create(requestBoardCreateDTO);
 		return "redirect:/board/list";
 	}
 

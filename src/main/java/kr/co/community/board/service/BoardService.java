@@ -7,12 +7,13 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.board.dto.RequestBoardCreateDTO;
 import kr.co.community.board.dto.RequestBoardDTO;
 import kr.co.community.board.dto.ResponseListDTO;
 
 public interface BoardService {
 
-	void create(BoardDTO boardDTO, BoardFileDTO boardFileDTO, MultipartFile file);
+	void create(RequestBoardCreateDTO requestBoardCreateDTO);
 	
 	ResponseListDTO getList(PageDTO pi, RequestBoardDTO requestBoardDTO);
 	
