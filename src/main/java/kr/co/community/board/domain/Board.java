@@ -1,4 +1,4 @@
-package kr.co.community.comment.domain;
+package kr.co.community.board.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

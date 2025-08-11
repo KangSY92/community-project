@@ -18,6 +18,9 @@ import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.dto.RequestBoardCreateDTO;
 import kr.co.community.board.dto.RequestBoardDTO;
+import kr.co.community.board.dto.RequestBoardDetailDTO;
+import kr.co.community.board.dto.RequestBoardEditDTO;
+import kr.co.community.board.dto.ResponseBoardDetailDTO;
 import kr.co.community.board.dto.ResponseListDTO;
 import kr.co.community.board.service.BoardService;
 import kr.co.community.board.util.Pagenation;
@@ -107,30 +110,30 @@ public class BoardController {
 	 * @return 게시글 상세 화면의 뷰 이름(board/view-post)
 	 */
 	@GetMapping("/detail")
-	public String detail(@RequestParam(name = "boardId") int boardId,
-						 @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
+	public String detail(RequestBoardDetailDTO requestBoardDetail,
 						 CommentDTO commentDTO, Model model) {
-		boardService.viewCountplus(boardId);
-		BoardDTO result = boardService.detail(boardId);
+		boardService.viewCountplus(requestBoardDetail.getBoardId());
+		ResponseBoardDetailDTO result = boardService.detail(requestBoardDetail.getBoardId());
 		model.addAttribute("board", result);
 		model.addAttribute(commentDTO);
 				
-		BoardFileDTO boardFileDTO = boardService.fileInfo(boardId);
+		BoardFileDTO boardFileDTO = boardService.fileInfo(requestBoardDetail.getBoardId());
 		model.addAttribute("boardFileDTO", boardFileDTO);
 				
-		int totalCount = commentService.commentCount(boardId);
-		int pageLimit = 5;
-		int boardLimit = 5; 
+		int totalCount = commentService.commentCount(requestBoardDetail.getBoardId());
 		
 		Pagenation pagenation = new Pagenation();
 		
-		PageDTO pi = pagenation.getpageDTO(totalCount, currentPage, pageLimit, boardLimit);
+		PageDTO pi = pagenation.getpageDTO(totalCount,
+										   requestBoardDetail.getCurrentPage(),
+										   requestBoardDetail.getPageLimit(),
+										   requestBoardDetail.getBoardLimit());
 		
 		model.addAttribute("pi", pi);
-		List<CommentDTO> comment = commentService.getList(boardId, pi);
+		List<CommentDTO> comment = commentService.getList(requestBoardDetail.getBoardId(), pi);
 		model.addAttribute("comment", comment);
 		
-		int commentCount = commentService.commentCount(boardId);
+		int commentCount = commentService.commentCount(requestBoardDetail.getBoardId());
 		commentDTO.setCommentCount(commentCount);
 		return "board/view-post";
 	}
@@ -185,7 +188,7 @@ public class BoardController {
 			return "redirect:/board/detail?boardId=" + boardId;
 		}
 		
-		BoardDTO result = boardService.detail(boardId);
+		ResponseBoardDetailDTO result = boardService.detail(boardId);
 		String author = result.getAuthor();
 		
 		if (author.equals(sessionId)) {
@@ -213,35 +216,33 @@ public class BoardController {
 	 * @return 수정된 게시글 상세 페이지로 리다이렉트
 	 */
 	@PostMapping("/edit")
-	public String edit(@RequestParam(name = "boardId") int boardId, BoardDTO boardDTO, BoardFileDTO boardFileDTO,
+	public String edit(RequestBoardEditDTO requestBoardEditDTO,
 					   @SessionAttribute(value="id", required=false) String sessionId,
-					   @RequestParam(name = "fileDelete") boolean fileDelete,
-					   @RequestParam(value = "file", required = false) MultipartFile file,
 					   RedirectAttributes redirectAttributes) {
 		
 		
 		
 		if(sessionId == null) {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "로그인이 필요합니다.");
-			return "redirect:/board/detail?boardId=" + boardId;
+			return "redirect:/board/detail?boardId=" + requestBoardEditDTO.getBoardId();
 		}
 		
-		BoardDTO result = boardService.detail(boardId);
+		ResponseBoardDetailDTO result = boardService.detail(requestBoardEditDTO.getBoardId());
 		String author = result.getAuthor();
 		
 
 	
 		
 		if (author.equals(sessionId)) {
-			if(fileDelete) {
-				boardService.fileDelete(boardId);
+			if(requestBoardEditDTO.isFileDelete()) {
+				boardService.fileDelete(requestBoardEditDTO.getBoardId());
 			}
-			boardService.edit(boardDTO, boardId, boardFileDTO, file);
-			return "redirect:/board/detail?boardId=" + boardId;
+			boardService.edit(requestBoardEditDTO);
+			return "redirect:/board/detail?boardId=" + requestBoardEditDTO.getBoardId();
 			
 		} else {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "다른 사용자 게시글은 수정 할 수 없습니다.");
-			return "redirect:/board/detail?boardId=" + boardId;
+			return "redirect:/board/detail?boardId=" + requestBoardEditDTO.getBoardId();
 		}
 		
 

@@ -7,15 +7,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
+import kr.co.community.board.domain.Board;
+import kr.co.community.board.domain.BoardFile;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.dto.RequestBoardCreateDTO;
 import kr.co.community.board.dto.RequestBoardDTO;
+import kr.co.community.board.dto.RequestBoardEditDTO;
+import kr.co.community.board.dto.ResponseBoardDetailDTO;
 import kr.co.community.board.dto.ResponseListDTO;
 import kr.co.community.board.mapper.BoardMapper;
 import kr.co.community.board.service.BoardService;
-import kr.co.community.comment.domain.Board;
 import kr.co.community.member.util.FileUpload;
 import lombok.RequiredArgsConstructor;
 
@@ -91,8 +94,9 @@ public class BoardServiceImpl implements BoardService {
 	 * @return 게시글 상세 데이터
 	 */
 	@Override
-	public BoardDTO detail(int boardId) {
-		return boardMapper.detail(boardId);
+	public ResponseBoardDetailDTO detail(int boardId) {
+		BoardDTO board = boardMapper.detail(boardId);
+		return ResponseBoardDetailDTO.from(board);
 	}
 
 	/**
@@ -128,12 +132,15 @@ public class BoardServiceImpl implements BoardService {
 	 * @param boardId  수정 대상 게시글 ID
 	 */
 	@Override
-	public void edit(BoardDTO boardDTO, int boardId, BoardFileDTO boardFileDTO, MultipartFile file) {
-		boardMapper.edit(boardDTO, boardId);
+	public void edit(RequestBoardEditDTO requestBoardEditDTO) {
+			//BoardDTO boardDTO, int boardId, BoardFileDTO boardFileDTO, MultipartFile file
+		Board board = requestBoardEditDTO.toBoard();
+		BoardFile boardFile = requestBoardEditDTO.toBoardFile();
+		boardMapper.edit(board);
 		try {
-			if (file != null && !file.isEmpty()) {
-				fileUpload.upload(file, boardFileDTO);
-				boardMapper.fileUpdate(boardDTO, boardId, boardFileDTO, file);
+			if (requestBoardEditDTO.getFile() != null && !requestBoardEditDTO.getFile().isEmpty()) {
+				fileUpload.upload(requestBoardEditDTO.getFile(), boardFile);
+				boardMapper.fileUpdate(board, board, requestBoardEditDTO.getFile());
 
 				
 			}

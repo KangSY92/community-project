@@ -1,6 +1,5 @@
 package kr.co.community.board.dto;
 
-import kr.co.community.board.domain.Board;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,14 +9,11 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestBoardDTO {
+public class RequestBoardDetailDTO {
 	
-	private String text = "";
+	private int boardId;
 	private int currentPage = 1;
-	
-	public Board toBoard() {
-		return Board.builder()
-				.text(text)
-				.build();
-	}
+	private int pageLimit = 5;
+	private int boardLimit = 5; 
+
 }

@@ -6,12 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.community.board.domain.Board;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
-import kr.co.community.board.dto.RequestBoardCreateDTO;
-import kr.co.community.board.dto.RequestBoardDTO;
-import kr.co.community.comment.domain.Board;
 
 @Mapper
 public interface BoardMapper {
