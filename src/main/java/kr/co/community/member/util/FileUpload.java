@@ -9,7 +9,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.community.board.domain.BoardFile;
 import kr.co.community.board.dto.BoardFileDTO;
+import kr.co.community.board.dto.RequestBoardEditDTO;
 import kr.co.community.member.domain.Member;
 import kr.co.community.member.dto.RegisterDTO;
 import kr.co.community.member.dto.RequestRegisterDTO;
@@ -55,7 +57,7 @@ public class FileUpload {
 		
 	}
 	
-	public void upload(MultipartFile file, BoardFileDTO boardFileDTO) throws IOException {
+	public void upload(MultipartFile file, RequestBoardEditDTO requestBoardEditDTO) throws IOException {
 		// 1. 원본 파일 이름
 		String originalName = file.getOriginalFilename();
 		
@@ -72,9 +74,9 @@ public class FileUpload {
 		Files.write(path, file.getBytes());
 		
 		// 6. fileDTO에 저장 정보 세팅
-		boardFileDTO.setOriginName(originalName);
-		boardFileDTO.setUpdateName(changeName);
-		boardFileDTO.setPath(BoardFileDTO.RESOURCES_PATH);
+		requestBoardEditDTO.setOriginName(originalName);
+		requestBoardEditDTO.setUpdateName(changeName);
+		requestBoardEditDTO.setPath(BoardFile.RESOURCES_PATH);
 		
 	}
 	

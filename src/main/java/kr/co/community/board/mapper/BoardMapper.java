@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.community.board.domain.Board;
+import kr.co.community.board.domain.BoardFile;
 import kr.co.community.board.dto.BoardDTO;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
@@ -26,13 +27,13 @@ public interface BoardMapper {
 
 	void delete(int boardId);
 
-	void edit(@Param("board")BoardDTO boardDTO, @Param("boardId")int boardId);
+	void edit(Board board);
 
-	void fileUpload(@Param("board")Board board, @Param("boardFile")BoardFileDTO boardFileDTO, @Param("file")MultipartFile file);
+	void fileUpload(@Param("board")Board board, @Param("boardFile")BoardFile boardFile, @Param("file")MultipartFile file);
 
 	BoardFileDTO fileInfo(int boardId);
 
 	void fileDelete(int boardId);
 
-	void fileUpdate(@Param("board")BoardDTO boardDTO,@Param("boardId") int boardId, @Param("boardFile")BoardFileDTO boardFileDTO, @Param("file")MultipartFile file);
+	void fileUpdate(@Param("board")Board board, @Param("boardFile")BoardFile boardFile, @Param("file")MultipartFile file);
 }

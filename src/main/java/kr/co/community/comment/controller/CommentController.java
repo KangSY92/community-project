@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.community.comment.dto.CommentDTO;
+import kr.co.community.comment.dto.RequestCommentCreateDTO;
+import kr.co.community.comment.dto.RequestCommetDeleteDTO;
 import kr.co.community.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 
@@ -33,22 +35,22 @@ public class CommentController {
 	 * @return 댓글이 등록된 게시글의 상세 페이지로 리다이렉트
 	 */
 	@PostMapping("/create")
-	public String create(@RequestParam(name = "boardId") int boardId, CommentDTO commentDTO,
+	public String create(RequestCommentCreateDTO requestCommentCreateDTO,
 						 @SessionAttribute(value = "id", required = false) String sessionID,
 						 RedirectAttributes redirectAttributes,
 						 Model model) {
 		
 		if(sessionID == null) {
 			redirectAttributes.addFlashAttribute("commentMsg", "로그인이 필요합니다.");
-			return "redirect:/board/detail?boardId=" + boardId;
+			return "redirect:/board/detail?boardId=" + requestCommentCreateDTO.getBoardId();
 		} 
 		
-		commentDTO.setId(sessionID);
-		commentDTO.setAuthor(sessionID);
+		requestCommentCreateDTO.setId(sessionID);
+		requestCommentCreateDTO.setAuthor(sessionID);
 		
-		commentService.create(boardId, commentDTO);
+		commentService.create(requestCommentCreateDTO);
 		
-			return "redirect:/board/detail?boardId=" + boardId;
+			return "redirect:/board/detail?boardId=" + requestCommentCreateDTO.getBoardId();
 		
 	}
 	
@@ -64,21 +66,19 @@ public class CommentController {
 	 * @return 댓글이 삭제된 게시글의 상세 페이지로 리다이렉트
 	 */
 	@PostMapping("/delete")
-	public String delete(@RequestParam(name = "commentId") int commentId,
-						 @RequestParam(name = "boardId") int boardId,
+	public String delete(RequestCommetDeleteDTO requestCommetDeleteDTO,
 						 @SessionAttribute(value = "id", required = false) String sessionId,
-						 @RequestParam(name = "author") String author,
 						 RedirectAttributes redirectAttributes) {
 		
 		if(sessionId == null) {
 			redirectAttributes.addFlashAttribute("commentDeleteMsg", "로그인이 필요합니다.");
 			return "redirect:/";
-		} else if(sessionId.equals(author)) {
-			commentService.delete(commentId);
-			return "redirect:/board/detail?boardId=" + boardId;
+		} else if(sessionId.equals(requestCommetDeleteDTO.getAuthor())) {
+			commentService.delete(requestCommetDeleteDTO);
+			return "redirect:/board/detail?boardId=" + requestCommetDeleteDTO.getBoardId();
 		} else {
 			redirectAttributes.addFlashAttribute("commentDeleteMsg", "다른 사용자의 댓글은 삭제할 수 없습니다.");
-			return "redirect:/board/detail?boardId=" + boardId;
+			return "redirect:/board/detail?boardId=" + requestCommetDeleteDTO.getBoardId();
 		}
 		
 	}

@@ -6,12 +6,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.comment.domain.BoardComment;
 import kr.co.community.comment.dto.CommentDTO;
+import kr.co.community.comment.dto.RequestCommentCreateDTO;
 
 @Mapper
 public interface CommentMapper {
 
-	void create(@Param("boardId")int boardId, @Param("comment")CommentDTO commentDTO);
+	void create(BoardComment comment);
 
 	List<CommentDTO> getList(@Param("boardId")int boardId, @Param("pi")PageDTO pi);
 

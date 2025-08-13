@@ -4,16 +4,18 @@ import java.util.List;
 
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.comment.dto.CommentDTO;
+import kr.co.community.comment.dto.RequestCommentCreateDTO;
+import kr.co.community.comment.dto.RequestCommetDeleteDTO;
 
 public interface CommentService {
 
-	void create(int boardId, CommentDTO commentDTO);
+	void create(RequestCommentCreateDTO requestCommentCreateDTO);
 
 	int commentCount(int boardId);
 
 	List<CommentDTO> getList(int boardId, PageDTO pi);
 
-	void delete(int commentId);
+	void delete(RequestCommetDeleteDTO requestCommetDeleteDTO);
 
 	void commentEdit(int commentId, CommentDTO commentDTO);
 

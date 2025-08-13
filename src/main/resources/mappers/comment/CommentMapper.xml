@@ -5,7 +5,7 @@
 
 <insert id="create">
 INSERT INTO BOARD_COMMENT VALUES(comment_seq.nextval,
-								 #{boardId},
+								 #{comment.boardId},
 								 #{comment.id},
 								 #{comment.author},
 								 #{comment.content},
