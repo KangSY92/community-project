@@ -5,10 +5,10 @@
 
 <insert id="create">
 INSERT INTO BOARD_COMMENT VALUES(comment_seq.nextval,
-								 #{comment.boardId},
-								 #{comment.id},
-								 #{comment.author},
-								 #{comment.content},
+								 #{boardId},
+								 #{id},
+								 #{author},
+								 #{content},
 								 DEFAULT,
 								 null)
 </insert>
@@ -41,7 +41,7 @@ DELETE FROM BOARD_COMMENT WHERE COMMENT_ID = #{commentId}
 
 <update id="commentEdit">
 UPDATE BOARD_COMMENT
-SET CONTENT = #{comment.content}
+SET CONTENT = #{content}
 WHERE COMMENT_ID = #{commentId}
 </update>
 

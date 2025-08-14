@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.community.comment.dto.CommentDTO;
 import kr.co.community.comment.dto.RequestCommentCreateDTO;
+import kr.co.community.comment.dto.RequestCommentEditDTO;
 import kr.co.community.comment.dto.RequestCommetDeleteDTO;
 import kr.co.community.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -84,19 +85,16 @@ public class CommentController {
 	}
 	
 	@PostMapping("/edit")
-	public String edit(@RequestParam(name = "commentId") int commentId,
-					   @RequestParam(name = "boardId") int boardId,
-					   @SessionAttribute(value = "id", required = false) String sessionId,
-					   @RequestParam(name = "author") String author,
-					   CommentDTO commentDTO) {
+	public String edit(RequestCommentEditDTO requestCommentEditDTO,
+					   @SessionAttribute(value = "id", required = false) String sessionId) {
 		
 		if(sessionId == null) {
 			return "redirect:/";
-		} else if(sessionId.equals(author)) {
-			commentService.commentEdit(commentId, commentDTO);
-			return "redirect:/board/detail?boardId=" + boardId;
+		} else if(sessionId.equals(requestCommentEditDTO.getAuthor())) {
+			commentService.commentEdit(requestCommentEditDTO);
+			return "redirect:/board/detail?boardId=" + requestCommentEditDTO.getBoardId();
 		} else {
-			return "redirect:/board/detail?boardId=" + boardId;
+			return "redirect:/board/detail?boardId=" + requestCommentEditDTO.getBoardId();
 		}
 	}
 	

@@ -8,6 +8,7 @@ import kr.co.community.board.dto.PageDTO;
 import kr.co.community.comment.domain.BoardComment;
 import kr.co.community.comment.dto.CommentDTO;
 import kr.co.community.comment.dto.RequestCommentCreateDTO;
+import kr.co.community.comment.dto.RequestCommentEditDTO;
 import kr.co.community.comment.dto.RequestCommetDeleteDTO;
 import kr.co.community.comment.mapper.CommentMapper;
 import kr.co.community.comment.service.CommentService;
@@ -69,8 +70,9 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public void commentEdit(int commentId, CommentDTO commentDTO) {
-		commentMapper.commentEdit(commentId, commentDTO);
+	public void commentEdit(RequestCommentEditDTO requestCommentEditDTO) {
+		BoardComment comment = requestCommentEditDTO.toBoardComment();
+		commentMapper.commentEdit(comment);
 		
 	}
 	

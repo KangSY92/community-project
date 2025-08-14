@@ -5,6 +5,7 @@ import java.util.List;
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.comment.dto.CommentDTO;
 import kr.co.community.comment.dto.RequestCommentCreateDTO;
+import kr.co.community.comment.dto.RequestCommentEditDTO;
 import kr.co.community.comment.dto.RequestCommetDeleteDTO;
 
 public interface CommentService {
@@ -17,7 +18,7 @@ public interface CommentService {
 
 	void delete(RequestCommetDeleteDTO requestCommetDeleteDTO);
 
-	void commentEdit(int commentId, CommentDTO commentDTO);
+	void commentEdit(RequestCommentEditDTO requestCommentEditDTO);
 
 	
 
