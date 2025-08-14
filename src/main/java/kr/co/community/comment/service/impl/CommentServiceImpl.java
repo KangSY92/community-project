@@ -5,7 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.comment.domain.BoardComment;
 import kr.co.community.comment.dto.CommentDTO;
+import kr.co.community.comment.dto.RequestCommentCreateDTO;
+import kr.co.community.comment.dto.RequestCommentEditDTO;
+import kr.co.community.comment.dto.RequestCommetDeleteDTO;
 import kr.co.community.comment.mapper.CommentMapper;
 import kr.co.community.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +30,9 @@ public class CommentServiceImpl implements CommentService {
 	 * @param commentDTO 등록한 댓글 데이터가 담긴 DTO 객체
 	 */
 	@Override
-	public void create(int boardId, CommentDTO commentDTO) {
-		
-		commentMapper.create(boardId, commentDTO);
+	public void create(RequestCommentCreateDTO requestCommentCreateDTO) {
+		BoardComment comment = requestCommentCreateDTO.toBoardComment();
+		commentMapper.create(comment);
 	}
 
 	/**
@@ -60,13 +64,15 @@ public class CommentServiceImpl implements CommentService {
 	 * @param commentId 삭제할 댓글의 ID
 	 */
 	@Override
-	public void delete(int commentId) {
+	public void delete(RequestCommetDeleteDTO requestCommetDeleteDTO) {
+		int commentId = requestCommetDeleteDTO.getCommentId();
 		commentMapper.delete(commentId);
 	}
 
 	@Override
-	public void commentEdit(int commentId, CommentDTO commentDTO) {
-		commentMapper.commentEdit(commentId, commentDTO);
+	public void commentEdit(RequestCommentEditDTO requestCommentEditDTO) {
+		BoardComment comment = requestCommentEditDTO.toBoardComment();
+		commentMapper.commentEdit(comment);
 		
 	}
 	

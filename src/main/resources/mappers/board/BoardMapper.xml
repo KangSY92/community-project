@@ -70,8 +70,7 @@
 
 	<update id="edit">
 		UPDATE BOARD
-		SET TITLE = #{board.title}, CONTENT = #{board.content}, UPDATE_DATE =
-		SYSDATE
+		SET TITLE = #{title}, CONTENT = #{content}, UPDATE_DATE = SYSDATE
 		WHERE BOARD_ID = #{boardId}
 	</update>
 
@@ -96,7 +95,7 @@
 	
 	<insert id="fileUpdate">
 	INSERT INTO BOARD_FILE VALUES(file_seq.nextval,
-									  #{boardId},
+									  #{board.boardId},
 									   #{boardFile.path},
 									   #{boardFile.originName},
 									   #{boardFile.updateName}

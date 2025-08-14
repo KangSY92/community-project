@@ -15,7 +15,7 @@
       <div class="container">
         <h2>게시글 작성</h2>
         
-        <form th:action="@{/board/create}" method="post" th:object="${boardDTO}" enctype="multipart/form-data" id="postForm" class="post-form">
+        <form th:action="@{/board/create}" method="post" th:object="${requestBoardCreateDTO}" enctype="multipart/form-data" id="postForm" class="post-form">
           <div class="form-group">
             <label for="postTitle">제목</label>
             <input type="text" id="postTitle" name="title" th:field="*{title}" required>

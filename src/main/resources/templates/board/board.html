@@ -18,8 +18,8 @@
 					<h2>게시판</h2>
 					<div class="board-actions">
 						<div class="search-box">
-							<form action="/board/list" method="get" th:object="${boardDTO}">
-							<input type="text" placeholder="검색어를 입력하세요" th:field="*{text}">
+							<form action="/board/list" method="get">
+							<input type="text" name="text" placeholder="검색어를 입력하세요" th:value="${search.text}">
 							<button type="submit" class="btn">검색</button>
 							</form>
 						</div>
@@ -56,18 +56,18 @@
 					<a href="#" class="page-link" th:if="${pi.currentPage <= 1}" aria-label="Previous"
 						aria-hidden="true">&laquo;</a>
 					<a class="page-link" th:if="${pi.currentPage > 1}"
-						th:href="@{/board/list(currentPage=${pi.currentPage-1}, text=${boardDTO.text})}" aria-label="Previous"
+						th:href="@{/board/list(currentPage=${pi.currentPage-1}, text=${search.text})}" aria-label="Previous"
 						aria-hidden="true">&laquo;</a>
 
 					<!--페이지-->
 					<a class="page-link" th:each="page : ${#numbers.sequence(pi.startPage, pi.endPage)}"
-						th:href="@{/board/list(currentPage=${page}, text=${boardDTO.text})}" th:text="${page}" th:if="${page} != 0"></a>
+						th:href="@{/board/list(currentPage=${page}, text=${search.text})}" th:text="${page}" th:if="${page} != 0"></a>
 
 					<!--오른쪽 버튼-->
 					<a class="page-link" th:if="${pi.currentPage >= pi.maxPage}" href="#" aria-label="Next"
 						aria-hidden="true">&raquo;</a>
 					<a class="page-link" th:if="${pi.currentPage < pi.maxPage}"
-						th:href="@{/board/list(currentPage=${pi.currentPage+1}, text=${boardDTO.text})}" aria-label="Next"
+						th:href="@{/board/list(currentPage=${pi.currentPage+1}, text=${search.text})}" aria-label="Next"
 						aria-hidden="true">&raquo;</a>
 
 				</div>
