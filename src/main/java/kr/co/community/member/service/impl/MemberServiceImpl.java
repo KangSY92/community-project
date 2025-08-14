@@ -13,6 +13,7 @@ import kr.co.community.member.domain.Member;
 import kr.co.community.member.dto.RequestLoginDTO;
 import kr.co.community.member.dto.RequestRegisterDTO;
 import kr.co.community.member.dto.ResponseLoginDTO;
+import kr.co.community.member.enums.ImagePath;
 import kr.co.community.member.exception.MemberException;
 import kr.co.community.member.mapper.MemberMapper;
 import kr.co.community.member.service.MemberService;
@@ -73,11 +74,11 @@ public class MemberServiceImpl implements MemberService {
 			// 프로필 이미지 업로드 처리
 			if (requestRegisterDTO.getProfileImage() != null && !requestRegisterDTO.getProfileImage().isEmpty()) {
 				
-				fileUpload.upload(requestRegisterDTO.getProfileImage(), member, RequestRegisterDTO.LOCAL_PATH, RequestRegisterDTO.IMG_PATH);
+				fileUpload.upload(requestRegisterDTO.getProfileImage(), member, ImagePath.LOCAL_PATH.getPath(),  ImagePath.IMG_PATH.getPath());
 			} else {
 				// 이미지가 없을 경우 기본 이미지 설정
-				member.setImgName("profil-img.png");
-				member.setImgPath(RequestRegisterDTO.IMG_PATH);
+				member.setImgName(ImagePath.NAME_SET.getPath());
+				member.setImgPath(ImagePath.IMG_PATH.getPath());
 			}
 
 			// 회원정보 및 약관 동의 내역 저장(insert)
