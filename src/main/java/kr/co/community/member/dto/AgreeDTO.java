@@ -3,7 +3,6 @@ package kr.co.community.member.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * 회원 약관 동의 정보를 담는 DTO 클래스 입니다.
@@ -13,7 +12,6 @@ import lombok.Setter;
  * 이 객체는 컨트롤러에서 전달받아 DB에 저장하거나 검증하는 곳에 사용됩니다.
  */
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AgreeDTO {

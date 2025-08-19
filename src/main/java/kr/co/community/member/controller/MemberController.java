@@ -7,15 +7,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import kr.co.community.member.dto.AgreeDTO;
 import kr.co.community.member.dto.RegisterDTO;
-import kr.co.community.member.service.impl.MemberServiceImpl;
+import kr.co.community.member.dto.RequestLoginDTO;
+import kr.co.community.member.dto.RequestRegisterDTO;
+import kr.co.community.member.dto.ResponseLoginDTO;
+import kr.co.community.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 	
 	/** 회원 서비스 로직을 처리하는 객체 */
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
     
     /** 비밀번호 암호화를 위한 객체 */
     private final PasswordEncoder passwordEncoder;
@@ -56,19 +56,15 @@ public class MemberController {
 	 * 유효성 검사 오류가 있을 경우 회원가입 폼으로 리다이렉트 합니다.
 	 * 회원가입 성공 시 메인 페이지로 이동하고, 실패시 실패 메시지를 전달합니다.
 	 * 
-	 * @param registerDTO 회원정보 DTO
-	 * @param agreeDTO 약관 동의 정보 DTO
+	 * @param requestRegisterDTO 회원정보 DTO
 	 * @param bindingResult 유효성 검사 결과
-	 * @param profileImage 업로드된 프로필 이미지
 	 * @param redirectAttributes FlashAttribute 전달 객체
 	 * @param model 뷰에 전달할 모델 객체
 	 * @return 리다이렉트 대상 경로
 	 */
 	@PostMapping("/register")
-	public String register(@Valid RegisterDTO registerDTO, 
-						   AgreeDTO agreeDTO, 
+	public String register(@Valid RequestRegisterDTO requestRegisterDTO, 
 						   BindingResult bindingResult,
-						   @RequestParam("profileImage") MultipartFile profileImage,
 						   RedirectAttributes redirectAttributes,
 						   Model model) {
     	
@@ -77,14 +73,14 @@ public class MemberController {
 				//유효성 검사 오류가 있는 경우 회원가입 폼으로 되돌아감
 				return "redirect:/member/register/form";
 			}
-			
 			//회원가입 처리 서비스 호출
-			memberService.register(registerDTO, agreeDTO, profileImage);
+			memberService.register(requestRegisterDTO);
 			redirectAttributes.addFlashAttribute("registMsg", "회원가입에 성공했습니다.");
 			//메인페이지로 이동
 			return "redirect:/";
 			
 		} catch(Exception e) {
+			e.printStackTrace();
 			redirectAttributes.addFlashAttribute("registMsg", "회원가입에 실패했습니다.");
 			return "redirect:/member/register/form"; 
 		}
@@ -96,22 +92,24 @@ public class MemberController {
 	 * 로그인 성공시 사용자 정보를 세션에 저장하고 메인 페이지로 리다이렉트합니다.
 	 * 실패시 실패 메시지를 전달합니다.
 	 * 
-	 * @param registerDTO 로그인 요청 정보(아이디, 비밀번호)
+	 * @param requestRegisterDTO 로그인 요청 정보(아이디, 비밀번호)
 	 * @param session 현재 HTTP 세션
 	 * @param redirectAttributes FlashAttribute 전달 객체
 	 * @return 메인페이지로 리다이렉트
 	 */
 	@PostMapping("/login")
-	public String login(RegisterDTO registerDTO, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String login(RequestLoginDTO requestLoginDTO,
+						HttpSession session,
+						RedirectAttributes redirectAttributes) {
 
-			RegisterDTO result = memberService.login(registerDTO);
+			ResponseLoginDTO result = memberService.login(requestLoginDTO);
 			
 	        if (result == null) {
 	        	redirectAttributes.addFlashAttribute("loginFailMsg", "존재하지 않는 사용자입니다.");
 	        	return "redirect:/";
 	        }
-
-	        if (!passwordEncoder.matches(registerDTO.getPassword(), result.getPassword())) {
+	        
+	        if (!passwordEncoder.matches(requestLoginDTO.getPassword(), result.getPassword())) {
 	        	redirectAttributes.addFlashAttribute("loginFailMsg", "비밀번호가 일치하지 않습니다.");
 	        	return "redirect:/";
 	        }

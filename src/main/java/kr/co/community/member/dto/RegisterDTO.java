@@ -3,7 +3,6 @@ package kr.co.community.member.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * 회원등록 시 사용하는 데이터 전달 객체(DTO)입니다.
@@ -13,7 +12,6 @@ import lombok.Setter;
  * 프로필 이미지 경로, 이메일, 아이디, 비밀번호 등의 정보를 보함하고 있습니다. 
  */
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterDTO {

@@ -13,7 +13,7 @@
 		<result column="author" property="author" />
 	</resultMap>
 	
-	<resultMap id="boardFileResulMap" type="kr.co.community.board.dto.BoardFileDTO">
+	<resultMap id="boardFileResulMap" type="kr.co.community.board.domain.BoardFile">
 		<result column="file_id" property="fileId" />
 		<result column="board_id" property="boardId" />
 		<result column="path" property="path" />
@@ -70,8 +70,7 @@
 
 	<update id="edit">
 		UPDATE BOARD
-		SET TITLE = #{board.title}, CONTENT = #{board.content}, UPDATE_DATE =
-		SYSDATE
+		SET TITLE = #{title}, CONTENT = #{content}, UPDATE_DATE = SYSDATE
 		WHERE BOARD_ID = #{boardId}
 	</update>
 
@@ -96,7 +95,7 @@
 	
 	<insert id="fileUpdate">
 	INSERT INTO BOARD_FILE VALUES(file_seq.nextval,
-									  #{boardId},
+									  #{board.boardId},
 									   #{boardFile.path},
 									   #{boardFile.originName},
 									   #{boardFile.updateName}

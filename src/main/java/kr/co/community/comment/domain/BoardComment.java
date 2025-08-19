@@ -1,22 +1,22 @@
-package kr.co.community.board.dto;
+package kr.co.community.comment.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDTO {
-
+@Builder
+public class BoardComment {
+	
+	private int commentId;
 	private int boardId;
-	private String title;
+	private String id;
 	private String author;
 	private String content;
-	private int viewCount;
 	private String createDate;
 	private String updateDate;
-	private String dropDate;
-	
-	private String text = "";
+
 }

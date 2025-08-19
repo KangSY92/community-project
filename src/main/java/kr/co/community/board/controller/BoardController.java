@@ -9,13 +9,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.servlet.http.HttpSession;
-import kr.co.community.board.dto.BoardDTO;
+import kr.co.community.board.domain.BoardFile;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
+import kr.co.community.board.dto.RequestBoardCreateDTO;
+import kr.co.community.board.dto.RequestBoardDTO;
+import kr.co.community.board.dto.RequestBoardDeleteDTO;
+import kr.co.community.board.dto.RequestBoardDetailDTO;
+import kr.co.community.board.dto.RequestBoardEditDTO;
+import kr.co.community.board.dto.ResponseBoardDetailDTO;
+import kr.co.community.board.dto.ResponseListDTO;
 import kr.co.community.board.service.BoardService;
 import kr.co.community.board.util.Pagenation;
 import kr.co.community.comment.dto.CommentDTO;
@@ -23,7 +28,8 @@ import kr.co.community.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 게시판 관련 요청을 처리하는 컨트롤러 클래스입니다. 글작성, 목록 조회 등의 기능을 담당합니다.
+ * 게시판 관련 요청을 처리하는 컨트롤러 클래스입니다.
+ * 글작성, 수정, 삭제, 목록 조회, 상세 조회 기능을 담당합니다.
  */
 @Controller
 @RequestMapping("/board")
@@ -37,28 +43,26 @@ public class BoardController {
 	/**
 	 * 게시글 목록 페이지로 이동합니다.
 	 * 
+	 * @param requestBoardDTO 검색 및 페이지 정보가 포함된 DTO
+	 * @param model 뷰에 전달할 모델 객체 이름
 	 * @return 게시글 목록 화면의 뷰 이름 (board/board)
 	 */
 	@GetMapping("/list")
-	public String boardList(BoardDTO boardDTO,
-							@RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
-							@RequestParam(value = "text", required = false) String text,
+	public String boardList(RequestBoardDTO requestBoardDTO,
 							Model model) {
 
-		int totalCount = boardService.getTotalCount(boardDTO); // 전체 게시글 수
+		int totalCount = boardService.getTotalCount(requestBoardDTO); // 전체 게시글 수
 		int pageLimit = 5; // (버튼에) 보여질 페이지 수
 		int boardLimit = 5; // 한 페이지에 들어갈 게시글 수
 
 		Pagenation pagenation = new Pagenation();
 		
-		PageDTO pi = pagenation.getpageDTO(totalCount, currentPage, pageLimit, boardLimit);
-
-		boardDTO.setText(text);
+		PageDTO pi = pagenation.getpageDTO(totalCount, requestBoardDTO.getCurrentPage(), pageLimit, boardLimit);
 		
-		List<BoardDTO> boards = boardService.getList(pi, boardDTO);
-		model.addAttribute("boards", boards);
-		model.addAttribute("pi", pi);
-		model.addAttribute("boardDTO", boardDTO);
+		ResponseListDTO boards = boardService.getList(pi, requestBoardDTO);
+		model.addAttribute("boards", boards.getList());
+		model.addAttribute("search", boards.getSearch());
+		model.addAttribute("pi", boards.getPage());
 		return "board/board";
 	}
 
@@ -66,13 +70,15 @@ public class BoardController {
 	 * 게시글 작성 폼 페이지로 이동합니다.
 	 * 
 	 * @param model 뷰에 전달할 모델 객체
+	 * @param sessionId 세션에 저장된 로그인 사용자 ID
+	 * @param redirectAttributes 리다이렉트 시 메시지 전달용 객체
 	 * @return 게시글 작성 폼 화면의 뷰 이름(board/write-post)
 	 */
 	@GetMapping("/create/form")
 	public String createForm(Model model, @SessionAttribute(value="id", required=false) String sessionId, RedirectAttributes redirectAttributes) {
 
 		if (sessionId != null) {
-			model.addAttribute("boardDTO", new BoardDTO());
+			model.addAttribute("requestBoardCreateDTO", new RequestBoardCreateDTO());
 			model.addAttribute("boardFileDTO", new BoardFileDTO());
 			return "board/write-post";
 		} else {
@@ -84,54 +90,53 @@ public class BoardController {
 	/**
 	 * 게시글을 등록하고 목록 페이지로 리다이렉트 합니다.
 	 * 
-	 * @param boardDTO  사용자가 입력한 게시글 정보
+	 * @param requestBoardCreateDTO  사용자가 입력한 게시글 정보가 담긴 DTO
 	 * @param sessionID 세션에 저장된 로그인 사용자 ID
-	 * @param file 업로드할 첨부파일
 	 * @return 게시글 목록 페이지로 리다이렉트 (redirect:/board/list)
 	 */
 	@PostMapping("/create")
-	public String create(BoardDTO boardDTO, BoardFileDTO boardFileDTO,
-						 @SessionAttribute("id") String sessionID,
-						 @RequestParam(value = "file", required = false) MultipartFile file) {
-		boardDTO.setAuthor(sessionID);
+	public String create(RequestBoardCreateDTO requestBoardCreateDTO,
+						 @SessionAttribute("id") String sessionID
+						 ) {
+		requestBoardCreateDTO.setAuthor(sessionID);
 
-		boardService.create(boardDTO, boardFileDTO, file);
+		boardService.create(requestBoardCreateDTO);
 		return "redirect:/board/list";
 	}
 
 	/**
 	 * 게시글 상세 페이지로 이동합니다.
 	 * 
-	 * @param boardId 조회할 게시글 ID
+	 * @param requestBoardDetail 조회할 게시글 및 페이지 정보가 포함된 DTO
 	 * @param commentDTO 댓글 정보를 담는 DTO객체로, 댓글 개수 정보를 설정합니다.
 	 * @param model   뷰에 전달할 모델 객체
 	 * @return 게시글 상세 화면의 뷰 이름(board/view-post)
 	 */
 	@GetMapping("/detail")
-	public String detail(@RequestParam(name = "boardId") int boardId,
-						 @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
+	public String detail(RequestBoardDetailDTO requestBoardDetail,
 						 CommentDTO commentDTO, Model model) {
-		boardService.viewCountplus(boardId);
-		BoardDTO result = boardService.detail(boardId);
+		boardService.viewCountplus(requestBoardDetail.getBoardId());
+		ResponseBoardDetailDTO result = boardService.detail(requestBoardDetail.getBoardId());
 		model.addAttribute("board", result);
 		model.addAttribute(commentDTO);
 				
-		BoardFileDTO boardFileDTO = boardService.fileInfo(boardId);
-		model.addAttribute("boardFileDTO", boardFileDTO);
+		BoardFile boardFile = boardService.fileInfo(requestBoardDetail.getBoardId());
+		model.addAttribute("boardFileDTO", boardFile);
 				
-		int totalCount = commentService.commentCount(boardId);
-		int pageLimit = 5;
-		int boardLimit = 5; 
+		int totalCount = commentService.commentCount(requestBoardDetail.getBoardId());
 		
 		Pagenation pagenation = new Pagenation();
 		
-		PageDTO pi = pagenation.getpageDTO(totalCount, currentPage, pageLimit, boardLimit);
+		PageDTO pi = pagenation.getpageDTO(totalCount,
+										   requestBoardDetail.getCurrentPage(),
+										   requestBoardDetail.getPageLimit(),
+										   requestBoardDetail.getBoardLimit());
 		
 		model.addAttribute("pi", pi);
-		List<CommentDTO> comment = commentService.getList(boardId, pi);
+		List<CommentDTO> comment = commentService.getList(requestBoardDetail.getBoardId(), pi);
 		model.addAttribute("comment", comment);
 		
-		int commentCount = commentService.commentCount(boardId);
+		int commentCount = commentService.commentCount(requestBoardDetail.getBoardId());
 		commentDTO.setCommentCount(commentCount);
 		return "board/view-post";
 	}
@@ -141,22 +146,21 @@ public class BoardController {
 	 * 세션을 HttpSeeion 객체로 받아 세션에 로그인 정보가 없을 경우에도 적절히 처리합니다.
 	 * 삭제 성공 또는 실패 메세지를 RedirectAttributesdp에 담아 목록 페이지로 리다이렉트합니다.
 	 * 
-	 * @param boardId            삭제할 게시글의 ID
-	 * @param author             게시글 작성자 ID
+	 * @param requestBoardDeleteDTO 삭제할 게시글 정보가 담긴 DTO
 	 * @param sessionId          HttpSession 객체를 통해 세션에 저장된 로그인 사용자 ID를 가져옵니다.
 	 * @param redirectAttributes 리다이렉트시 사용자 메시지 전달용 객체
-	 * @return 게시글 목록 페이지로 리다이렉트 (삭제 성공/실패/로그인필요에 관계 없이 redirect:/board/list)
+	 * @return 게시글 목록 페이지로 리다이렉트 (redirect:/board/list)
 	 */
 	@PostMapping("/delete")
-	public String delete(@RequestParam(name = "boardId") int boardId, @RequestParam(name = "author") String author,
+	public String delete(RequestBoardDeleteDTO requestBoardDeleteDTO,
 			@SessionAttribute(value="id", required=false) String sessionId, RedirectAttributes redirectAttributes) {
 		
 
 		if (sessionId == null) {
 			redirectAttributes.addFlashAttribute("boardDeleteMsg", "로그인이 필요합니다.");
 			return "redirect:/board/list";
-		}else if (sessionId.equals(author)) {
-			boardService.delete(boardId, author, sessionId);
+		}else if (sessionId.equals(requestBoardDeleteDTO.getAuthor())) {
+			boardService.delete(requestBoardDeleteDTO, sessionId);
 			redirectAttributes.addFlashAttribute("boardDeleteMsg", "삭제되었습니다.");
 			return "redirect:/board/list";
 		} else {
@@ -186,13 +190,13 @@ public class BoardController {
 			return "redirect:/board/detail?boardId=" + boardId;
 		}
 		
-		BoardDTO result = boardService.detail(boardId);
+		ResponseBoardDetailDTO result = boardService.detail(boardId);
 		String author = result.getAuthor();
 		
 		if (author.equals(sessionId)) {
 			model.addAttribute("board", result);
-			BoardFileDTO boardFileDTO = boardService.fileInfo(boardId);
-			model.addAttribute("boardFileDTO", boardFileDTO);
+			BoardFile boardFile = boardService.fileInfo(boardId);
+			model.addAttribute("boardFileDTO", boardFile);
 			return "board/edit-post";
 		} else {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "다른 사용자 게시글은 수정 할 수 없습니다.");
@@ -204,45 +208,39 @@ public class BoardController {
 	/**
 	 * 게시글 수정을 처리합니다. 기존 파일 삭제 여부 및 새 파일 업로드 모두 처리됩니다.
 	 * 
-	 * @param boardId 게시글 ID
-	 * @param boardDTO 수정된 게시글 정보
-	 * @param boardFileDTO 수정된 파일 정보
+	 * @param requestBoardEditDTO 수정할 게시글 및 첨부파일 정보가 담긴 DTO
 	 * @param sessionId 로그인 사용자 ID
-	 * @param fileDelete 파일 삭제 여부 (true: 삭제)
-	 * @param file 새로 업로드할 파일
 	 * @param redirectAttributes 리다이렉트 메시지 전달용 객체
 	 * @return 수정된 게시글 상세 페이지로 리다이렉트
 	 */
 	@PostMapping("/edit")
-	public String edit(@RequestParam(name = "boardId") int boardId, BoardDTO boardDTO, BoardFileDTO boardFileDTO,
+	public String edit(RequestBoardEditDTO requestBoardEditDTO,
 					   @SessionAttribute(value="id", required=false) String sessionId,
-					   @RequestParam(name = "fileDelete") boolean fileDelete,
-					   @RequestParam(value = "file", required = false) MultipartFile file,
 					   RedirectAttributes redirectAttributes) {
 		
 		
 		
 		if(sessionId == null) {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "로그인이 필요합니다.");
-			return "redirect:/board/detail?boardId=" + boardId;
+			return "redirect:/board/detail?boardId=" + requestBoardEditDTO.getBoardId();
 		}
 		
-		BoardDTO result = boardService.detail(boardId);
+		ResponseBoardDetailDTO result = boardService.detail(requestBoardEditDTO.getBoardId());
 		String author = result.getAuthor();
 		
 
 	
 		
 		if (author.equals(sessionId)) {
-			if(fileDelete) {
-				boardService.fileDelete(boardId);
+			if(requestBoardEditDTO.isFileDelete()) {
+				boardService.fileDelete(requestBoardEditDTO.getBoardId());
 			}
-			boardService.edit(boardDTO, boardId, boardFileDTO, file);
-			return "redirect:/board/detail?boardId=" + boardId;
+			boardService.edit(requestBoardEditDTO);
+			return "redirect:/board/detail?boardId=" + requestBoardEditDTO.getBoardId();
 			
 		} else {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "다른 사용자 게시글은 수정 할 수 없습니다.");
-			return "redirect:/board/detail?boardId=" + boardId;
+			return "redirect:/board/detail?boardId=" + requestBoardEditDTO.getBoardId();
 		}
 		
 
