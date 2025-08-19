@@ -1,5 +1,7 @@
 package kr.co.community.member.mapper;
 
+import java.util.Optional;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.community.member.domain.Agree;
@@ -52,6 +54,6 @@ public interface MemberMapper {
 	 * @param registerDTO 로그인 요청 정보(아이디, 비밀번호)
 	 * @return 회원정보가 존재하면 해당 정보를 반환, 없으면 null
 	 */
-	Member login(RequestLoginDTO requestLoginDTO);
+	Optional<Member> login(RequestLoginDTO requestLoginDTO);
 
 }

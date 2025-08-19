@@ -16,6 +16,7 @@ import kr.co.community.board.dto.RequestBoardDeleteDTO;
 import kr.co.community.board.dto.RequestBoardEditDTO;
 import kr.co.community.board.dto.ResponseBoardDetailDTO;
 import kr.co.community.board.dto.ResponseListDTO;
+import kr.co.community.board.exception.BoardException;
 import kr.co.community.board.mapper.BoardMapper;
 import kr.co.community.board.service.BoardService;
 import kr.co.community.member.util.FileUpload;
@@ -96,7 +97,8 @@ public class BoardServiceImpl implements BoardService {
 	 */
 	@Override
 	public ResponseBoardDetailDTO detail(int boardId) {
-		BoardDTO board = boardMapper.detail(boardId);
+		BoardDTO board = boardMapper.detail(boardId)
+				.orElseThrow(() -> new BoardException("게시글이 존재하지 않습니다.", null));
 		return ResponseBoardDetailDTO.from(board);
 	}
 

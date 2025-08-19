@@ -1,6 +1,7 @@
 package kr.co.community.board.mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -22,7 +23,7 @@ public interface BoardMapper {
 
 	int viewCount(int boardId);
 
-	BoardDTO detail(int boardId);
+	Optional<BoardDTO> detail(int boardId);
 
 	void delete(int boardId);
 

@@ -1,6 +1,7 @@
 package kr.co.community.member.service.impl;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -116,16 +117,15 @@ public class MemberServiceImpl implements MemberService {
 
 	    try {
 	    	
-	        Member result = memberMapper.login(requestLoginDTO);
+	    	Member result = memberMapper.login(requestLoginDTO)
+	    			.orElseThrow(() ->  new MemberException("아이디 또는 비밀번호가 올바르지 않습니다.", null)); 
 
-	        if(result == null) {
-	        	return null;
-	        }
+//	        if(result == null) {
+//	        	return null;
+//	        }
 	        
 	        return ResponseLoginDTO.from(result);
 
-	    } catch (MemberException e) {
-	        throw e;
 	    } catch (Exception e) {
 	    	e.printStackTrace();  
 	        throw new MemberException("로그인 중 오류가 발생했습니다.", e); 
