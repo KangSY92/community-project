@@ -2,10 +2,8 @@ package kr.co.community.board.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @AllArgsConstructor
 public class PageDTO {
 	private int totalCount;		// 전체 게시글 수

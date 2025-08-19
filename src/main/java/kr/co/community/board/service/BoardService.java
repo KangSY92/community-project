@@ -1,6 +1,6 @@
 package kr.co.community.board.service;
 
-import kr.co.community.board.dto.BoardFileDTO;
+import kr.co.community.board.domain.BoardFile;
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.dto.RequestBoardCreateDTO;
 import kr.co.community.board.dto.RequestBoardDTO;
@@ -23,7 +23,7 @@ public interface BoardService {
 
 	int viewCountplus(int boardId);
 
-	BoardFileDTO fileInfo(int boardId);
+	BoardFile fileInfo(int boardId);
 
 	void fileDelete(int boardId);
 

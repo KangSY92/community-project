@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.co.community.board.domain.BoardFile;
 import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.dto.RequestBoardCreateDTO;
@@ -119,8 +120,8 @@ public class BoardController {
 		model.addAttribute("board", result);
 		model.addAttribute(commentDTO);
 				
-		BoardFileDTO boardFileDTO = boardService.fileInfo(requestBoardDetail.getBoardId());
-		model.addAttribute("boardFileDTO", boardFileDTO);
+		BoardFile boardFile = boardService.fileInfo(requestBoardDetail.getBoardId());
+		model.addAttribute("boardFileDTO", boardFile);
 				
 		int totalCount = commentService.commentCount(requestBoardDetail.getBoardId());
 		
@@ -194,8 +195,8 @@ public class BoardController {
 		
 		if (author.equals(sessionId)) {
 			model.addAttribute("board", result);
-			BoardFileDTO boardFileDTO = boardService.fileInfo(boardId);
-			model.addAttribute("boardFileDTO", boardFileDTO);
+			BoardFile boardFile = boardService.fileInfo(boardId);
+			model.addAttribute("boardFileDTO", boardFile);
 			return "board/edit-post";
 		} else {
 			redirectAttributes.addFlashAttribute("boardEditMsg", "다른 사용자 게시글은 수정 할 수 없습니다.");

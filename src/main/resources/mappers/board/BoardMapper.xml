@@ -13,7 +13,7 @@
 		<result column="author" property="author" />
 	</resultMap>
 	
-	<resultMap id="boardFileResulMap" type="kr.co.community.board.dto.BoardFileDTO">
+	<resultMap id="boardFileResulMap" type="kr.co.community.board.domain.BoardFile">
 		<result column="file_id" property="fileId" />
 		<result column="board_id" property="boardId" />
 		<result column="path" property="path" />

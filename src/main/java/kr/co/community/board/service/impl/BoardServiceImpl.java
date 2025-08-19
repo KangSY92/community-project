@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.co.community.board.domain.Board;
 import kr.co.community.board.domain.BoardFile;
 import kr.co.community.board.dto.BoardDTO;
-import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
 import kr.co.community.board.dto.RequestBoardCreateDTO;
 import kr.co.community.board.dto.RequestBoardDTO;
@@ -156,7 +155,7 @@ public class BoardServiceImpl implements BoardService {
 	 * @return 게시글에 첨부된 파일 정보 DTO
 	 */
 	@Override
-	public BoardFileDTO fileInfo(int boardId) {
+	public BoardFile fileInfo(int boardId) {
 		return boardMapper.fileInfo(boardId);
 		
 	}

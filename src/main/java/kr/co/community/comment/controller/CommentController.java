@@ -4,11 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.community.comment.dto.CommentDTO;
 import kr.co.community.comment.dto.RequestCommentCreateDTO;
 import kr.co.community.comment.dto.RequestCommentEditDTO;
 import kr.co.community.comment.dto.RequestCommetDeleteDTO;

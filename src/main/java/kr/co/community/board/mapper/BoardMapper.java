@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.co.community.board.domain.Board;
 import kr.co.community.board.domain.BoardFile;
 import kr.co.community.board.dto.BoardDTO;
-import kr.co.community.board.dto.BoardFileDTO;
 import kr.co.community.board.dto.PageDTO;
 
 @Mapper
@@ -31,7 +30,7 @@ public interface BoardMapper {
 
 	void fileUpload(@Param("board")Board board, @Param("boardFile")BoardFile boardFile, @Param("file")MultipartFile file);
 
-	BoardFileDTO fileInfo(int boardId);
+	BoardFile fileInfo(int boardId);
 
 	void fileDelete(int boardId);
 
